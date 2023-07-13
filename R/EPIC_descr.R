@@ -1,24 +1,28 @@
-#' EPIC: a package to Estimate the Proportion of Immune and Cancer cells from
+#' EPICatac: a package to Estimate the Proportion of Immune and Cancer cells from
 #'  tumor gene expression data.
 #'
-#' EPIC package provides the function and cell reference profiles to
+#' EPICatac package provides the function and cell reference profiles to
 #' estimate the proportion of immune, stromal, endothelial and cancer or other
-#' cells from bulk gene expression data.
+#' cells from bulk chromatin accessibility data (ATAC-Seq).
 #'
 #' See the package \link[=../doc/info.html]{vignette} and function definitions
 #' below.
 #'
-#' @section EPIC functions:
+#' @section EPICatac functions:
 #' \code{\link{EPIC}} is the main function to call to estimate the
 #'  various cells proportions from a bulk sample.
 #'
 #' @section Included datasets:
-#' \code{\link{BRef}}: reference profiles from circulating immune cells.
+#' \code{\link{BRef_ATAC}}: reference profiles for ATAC-Seq deconvolution of PBMCs datasets.
 #'
-#'  \code{\link{TRef}}: reference profiles from tumor infiltrating non-malignant
-#'  cells obtained from single cell data of melanoma patients.
+#' \code{\link{TRef_ATAC}}: reference profiles for ATAC-Seq deconvolution of tumor samples.
 #'
-#' \code{\link{melanoma_data}}: example dataset containing data from lymph nodes
+#' \code{\link{BRef}}: reference profiles from circulating immune cells for RNA-Seq deconvolution.
+#'
+#' \code{\link{TRef}}: reference profiles from tumor infiltrating non-malignant
+#'  cells obtained from single cell data of melanoma patients for RNA-Seq deconvolution.
+#'
+#' \code{\link{melanoma_data}}: example of RNA-Seq dataset containing data from lymph nodes
 #'  from patients with metastatic melanoma.
 #'
 #' \code{\link{mRNA_cell_default}}: values of mRNA per cell for the main cell
@@ -31,13 +35,56 @@
 #' (\url{https://elifesciences.org/articles/26476})
 #'
 #' @section Authors:
-#' Julien Racle <\email{julien.racle@unil.ch}> and David Gfeller
+#' Aurélie Gabriel <\email{aurelie.gabriel@unil.ch}>, Julien Racle <\email{julien.racle@unil.ch}> and David Gfeller
 #' <\email{david.gfeller@unil.ch}>.
 #'
 #' @docType package
-#' @name EPIC.package
+#' @name EPICatac.package
 NULL
 
+#' ATAC-Seq reference profiles containing cell-types found in peripheral blood mononuclear cells (PBMCs).
+#'
+#' A dataset containing the reference profiles obtained from immune cell
+#' samples of \emph{B cells}, \emph{CD4 T cells}, \emph{CD8 T cells},
+#' \emph{Monocytes}, \emph{NK cells}, \emph{Dendritic cells} and \emph{Neutrophils}, purified from
+#' PBMC or whole blood.
+#'
+#' The original samples were obtained from healthy donors and donors ......
+#'
+#' @format A list of 3 elements: \describe{ \item{$refProfiles,
+#'   $refProfiles.var}{Matrices (nFeatures x nRefCells) of the chromatin accessibility (in
+#'   TPM-like counts) from the reference cells and the variability of this chromatin
+#'   accessibility for each peak and each cell type} \item{$sigPeaks}{A list of
+#'   marker peaks used to deconvolve the cell proportions} }
+"BRef_ATAC"
+
+#' ATAC-Seq reference profiles containing cancer-relevant cell-types.
+#'
+#' A dataset containing the reference profiles obtained from immune cell
+#' samples of \emph{B cells}, \emph{CD4 T cells}, \emph{CD8 T cells},
+#' \emph{Macrophages}, \emph{NK cells}, \emph{Dendritic cells}, \emph{Neutrophils}, \emph{fibroblasts} and \emph{endothelial cells}
+#' purified from PBMC or whole blood or .......
+#'
+#' The collected cells from healthy or diseased samples and stimulated cells.
+#'
+#' @format A list of 3 elements: \describe{ \item{$refProfiles,
+#'   $refProfiles.var}{Matrices (nGenes x nRefCells) of the chromatin accessibility (in
+#'   TPM-like counts) from the reference cells and the variability of this chromatin
+#'   accessibility for each peak and each cell type} \item{$sigGenes}{A list of
+#'   marker peaks used to deconvolve the cell proportions} }
+"TRef_ATAC"
+
+#' Chains to lift over hg19 or hg18 coordinates.
+#'
+#' Chains object to perform liftover
+#'
+#' @format Chain object: \describe{ \item{hg18_to_hg38_chain}{Chain object} }
+#'
+#' @source \enumerate{
+#'  \item \url{https://hgdownload.cse.ucsc.edu/goldenpath/hg19/liftOver/hg19ToHg38.over.chain.gz},
+#'  \item \url{https://hgdownload.cse.ucsc.edu/goldenpath/hg18/liftOver/hg18ToHg38.over.chain.gz}
+#'  }
+"liftover_chains"
 
 #' Reference profiles from circulating immune cells.
 #'
@@ -139,3 +186,27 @@ NULL
 #' @source \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE93722}
 "melanoma_data"
 
+#' Example dataset containing bulk ATAC-Seq data from five healthy samples.
+#'
+#' This is the dataset measured in \href{...}{
+#'  \cite{Gabriel et al., 2023}}. It contains
+#' the ATAC-Seq data from 5 healthy samples as well as the proportions of the
+#' the immune cell types as measured by FACS.
+#'
+#' @format This is a list of 3 elements: \describe{
+#'  \item{$counts}{(matrix of 106446 genes x 5 donors) The raw counts were normalized
+#'  using a TPM-like approach, i.e normalizing the counts by the length of the open regions
+#'  and by the total number of counts in each sample. The open regions have been determined
+#'  using the MACS2 peak calling tool within the PEPATAC framework and the \emph{hg38} genome
+#'  was considered.}
+#'  \item{$cellFractions.obs}{(matrix of 5 donors x 6 cell types) The
+#'    proportions of the different cell types measured by FACS (the
+#'    "other_cells" correspond to the live cells without any marker of the
+#'    other given cell types).}
+#'  \item{$cellFractions.pred}{(matrix of 5 donors x 6 cell types) The
+#'    proportions of the different cell types, as predicted by EPICatac based on
+#'    the reference profiles \code{BRef_ATAC}.}
+#' }
+#'
+#' @source \url{...}
+"PBMC_ATAC_data"
