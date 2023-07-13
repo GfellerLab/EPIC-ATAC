@@ -15,7 +15,8 @@ and returning the scaled counts for the subset signature genes (or all genes
 if it sigGenes is \code{NULL}), with the scaled counts computed based on all
 the 'renormGenes' (or all genes if it is NULL). The renormalization is made
 independently for each sample, to have the sum of each columns over the
-renormGenes equal to 1e6.
+renormGenes equal to 1e6. For ATAC-Seq data chromatin accessible regions (peaks)
+replace the genes.
 
 normFact, if not null, is used as the normalization factor instead of
  the colSums (used to renormalize the refProfiles.var by the same amount
