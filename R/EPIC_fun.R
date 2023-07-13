@@ -1,21 +1,27 @@
 # ####################################'
 #
-# Package EPIC - developed by Julien Racle from David Gfeller's group of the
-# University of Lausanne and Ludwig Institute for Cancer Research. Copyrights
-# remain reserved as described in the included LICENSE file.
+# Package EPIC_ATAC - adapted by Aurélie Gabriel from the package EPIC developed by Julien Racle
+# from David Gfeller's group of the University of Lausanne and Ludwig Institute for Cancer Research.
+# Copyrights remain reserved as described in the included LICENSE file.
 #
 # ####################################'
 
 #' Estimate the proportion of immune and cancer cells.
 #'
-#' \code{EPIC} takes as input bulk gene expression data (RNA-seq) and returns
-#'  the proportion of mRNA and cells composing the various samples.
-#'
+#' \code{EPIC} takes as input bulk gene expression data (RNA-seq) or bulk chromatin accessibility data (ATAC-Seq)
+#' and returns the proportion of cells composing the various samples.
 #' This function uses a constrained least square minimization to estimate the
 #' proportion of each cell type with a reference profile and another
-#' uncharacterized cell type in bulk gene expression samples.
+#' uncharacterized cell type in bulk samples.
 #'
-#' The names of the genes in the bulk samples, the reference samples and in the
+#' For ATAC-Seq data, the features names in the bulk samples should correspond to the
+#' coordinates of the open chromatin regions (peaks) identified in the bulk samples and
+#' should be in the following format: chr-start-end. The coordinates do not need to be
+#' matched to the coordinates of the peaks used in the reference profiles. The EPIC_ATAC
+#' function will lift over the coordinates to hg38 if needed (genome_version parameter) and
+#' will match the hg38 peaks coordinates to reference peaks coordinates.
+#'
+#' For RNA-Seq data, the names of the genes in the bulk samples, the reference samples and in the
 #' gene signature list need to be the same format (gene symbols are used in the
 #' predefined reference profiles). The full list of gene names don't need to be
 #' exactly the same between the reference and bulk samples: \emph{EPIC}
@@ -24,43 +30,49 @@
 #' these cases differently, you can remove the duplicates before calling
 #' \emph{EPIC}.
 #'
-#' @param bulk A matrix (\code{nGenes} x \code{nSamples}) of the genes
-#'    expression from each bulk sample (the counts should be given in TPM,
-#'    RPKM or FPKM when using the prebuilt reference profiles). This matrix
-#'    needs to have rownames telling the gene names (corresponds to the gene
-#'    symbol in the prebuilt reference profiles (e.g. CD8A, MS4A1) - no
-#'    conversion of IDs is performed at the moment).
-#'    It is advised to keep all genes in the bulk instead of a subset of
-#'    signature genes (except if \code{scaleExprs = FALSE} in which case it
+#' @param bulk A matrix (\code{nFeatures} x \code{nSamples}) of the genes
+#'    expression/peaks accessibility from each bulk sample (the counts should be given in TPM,
+#'    RPKM or FPKM for RNA-Seq or in TPM-like counts when using the prebuilt reference profiles).
+#'    This matrix needs to have rownames telling the gene names (corresponds to the gene
+#'    symbol in the prebuilt reference profiles (e.g. CD8A, MS4A1)) or the peaks coordinate (e.g chr1-112452-112952).
+#'    It is advised to keep all features in the bulk instead of a subset of
+#'    marker features (except if \code{scaleExprs = FALSE} in which case it
 #'    doesn't make any difference).
 #' @param reference (optional): A string or a list defining the reference cells.
 #'    It can take multiple formats, either: \itemize{
-#'      \item\code{NULL}: to use the default reference profiles and genes
-#'        signature \code{\link{TRef}}.
-#'      \item a char: either \emph{"BRef"} or \emph{"TRef"}
-#'        to use the reference cells and genes signature of the corresponding
-#'        datasets (see \code{\link{BRef}} and \code{\link{TRef}}).
+#'      \item\code{NULL}: to use the default reference profiles and
+#'        markers in \code{\link{TRef}} for RNA-Seq deconvolution or in \code{\link{TRef_ATAC}}
+#'      \item a char: either \emph{"BRef"} or \emph{"TRef"} for RNA-Seq data deconvolution or
+#'         \emph{"BRef_ATAC"} or  \emph{"TRef_ATAC"} for ATAC-Seq data deconvolution
+#'        to use the reference cells and markers of the corresponding
+#'        datasets (see \code{\link{BRef}}, \code{\link{TRef}}, \code{\link{BRef_ATAC}}, \code{\link{TRef_ATAC}}).
 #'      \item a list. When a list it should include: \describe{
-#'        \item{\code{$refProfiles}}{a matrix (\code{nGenes} x \code{nCellTypes})
-#'        of the reference cells genes expression (don't include a column of
+#'        \item{\code{$refProfiles}}{a matrix (\code{nFeatures} x \code{nCellTypes})
+#'        of the reference cells genes expression or peak accessibility (don't include a column of
 #'        the 'other cells' (representing usually the cancer cells for which
 #'        such a profile is usually not conserved between samples);
 #'        the rownames needs to be defined as well as the colnames giving the
-#'        names of each gene and reference cell types respectively.
-#'        It is advised to keep all genes in this \code{refProfiles} matrix
-#'        instead of a subset of signature genes;
+#'        names of each feature and reference cell types respectively.
+#'        It is advised to keep all features in this \code{refProfiles} matrix
+#'        instead of a subset of marker features;
 #'        }
-#'        \item{\code{$sigGenes}}{a character vector of the gene names to use as
+#'        \item{\code{$sigGenes} (for RNA-Seq)}{a character vector of the gene names to use as
 #'          signature - sigGenes can also be given as a direct input to EPIC
 #'          function;}
-#'        \item{\code{$refProfiles.var}}{(optional): a matrix (\code{nGenes} x
-#'        \code{nCellTypes}) of the variability of each gene expression for each
-#'        cell type, which is used to define weights on each gene for the
+#'        \item{\code{$sigPeaks} (for ATAC-Seq)}{a character vector of the peak names to use as
+#'          markers;}
+#'        \item{\code{$refProfiles.var}}{(optional): a matrix (\code{nFeatures} x
+#'        \code{nCellTypes}) of the variability of each gene expression or peak accessibility for each
+#'        cell type, which is used to define weights on each feature for the
 #'        optimization (if this is absent, we assume an identical variability
-#'        for all genes in all cells) - it needs to have the same dimnames than
+#'        for all features in all cells) - it needs to have the same dimnames than
 #'        refProfiles;}
 #'        }
 #'    }
+#' @param ATAC (optional, default is TRUE): boolean telling if the bulk
+#'    matrix is based on RNA-Seq or ATAC-Seq data.
+#' @param genome_version (optional, default is hg38): A string corresponding to
+#'    the genome version that was used to define the peaks coordinates in the bulk matrix.
 #' @param mRNA_cell (optional): A named numeric vector: tells (in arbitrary
 #'    units) the amount of mRNA for each of the reference cells and of the
 #'    other uncharacterized (cancer) cell. Two names are of special meaning:
@@ -75,6 +87,8 @@
 #'    the cell fractions).
 #'    To note: if data is in tpm, this mRNA per cell would ideally correspond
 #'    to some number of transcripts per cell.
+#'    This option is not used for ATAC-Seq data deconvolution (ATAC = TRUE). A value of 1 is
+#'    considered for all cell-types included in the reference profiles.
 #' @param mRNA_cell_sub (optional): This can be given instead of \code{mRNA_cell} (or
 #'    in addition to it). It is also a named numeric vector, used to replace
 #'    only the mRNA/cell values from some cell types (or to add values for new
@@ -86,61 +100,75 @@
 #'    input variable, it is these signature genes that will be used instead of
 #'    the ones given with the reference profile.
 #' @param scaleExprs (optional, default is TRUE): boolean telling if the bulk
-#'    samples and reference gene expression profiles should be rescaled based on
-#'    the list of genes in common between the them (such a rescaling is
+#'    samples and reference profiles should be rescaled based on
+#'    the list of features in common between the them (such a rescaling is
 #'    recommanded).
 #' @param withOtherCells (optional, default is TRUE): if EPIC should allow for
-#'    an additional cell type for which no gene expression reference profile is
+#'    an additional cell type for which no gene expression or peak accessibility reference profile is
 #'    available or if the bulk is assumed to be composed only of the cells with
 #'    reference profiles.
 #' @param constrainedSum (optional, default is TRUE): tells if the sum of all
 #'    cell types should be constrained to be < 1. When
 #'    \code{withOtherCells=FALSE}, there is additionally a constrain the the sum
 #'    of all cell types with reference profiles must be > 0.99.
+#' @param nb_iter (optional, default is 1000): number of iterations allowed for the optimization step of the least square regression.
 #' @param rangeBasedOptim (optional): when this is FALSE (the default), the
 #'    least square optimization is performed as described in
 #'    \href{https://elifesciences.org/articles/26476}{
 #'     \cite{Racle et al., 2017, eLife}}, which is recommanded.
 #'    When this variable is TRUE, EPIC uses the variability of each gene
 #'    from the reference profiles in another way: instead of defining weights
-#'    (based on the variability) for the fit of each gene, we define a range of
-#'    values accessible for each gene (based on the gene expression value in
-#'    the reference profile +/- the variability values). The
+#'    (based on the variability) for the fit of each feature, we define a range of
+#'    values accessible for each feature (based on the gene expression or peak accessibility
+#'    value in the reference profile +/- the variability values). The
 #'    error that the optimization tries to minimize is by how much
-#'    the predicted gene expression is outside of this allowed range of values.
+#'    the predicted gene expression or peak accessibility is outside of this allowed range of values.
 #'
 #' @return A list of 3 matrices:\describe{
 #'  \item{\code{mRNAProportions}}{(\code{nSamples} x (\code{nCellTypes+1})) the
 #'    proportion of mRNA coming from all cell types with a ref profile + the
-#'    uncharacterized other cell.}
+#'    uncharacterized other cell.This matrix will be returned only when ATAC = FALSE.}
 #'  \item{\code{cellFractions}}{(\code{nSamples} x (\code{nCellTypes+1})) this
-#'    gives the proportion of cells from each cell type after accounting for
-#'    the mRNA / cell value.}
+#'    gives the proportion of cells from each cell type (after accounting for
+#'    the mRNA / cell value for RNA-Seq data).}
 #'  \item{\code{fit.gof}}{(\code{nSamples} x 12) a matrix telling the quality
-#'    for the fit of the signature genes in each sample. It tells if the
+#'    for the fit of the markers in each sample. It tells if the
 #'    minimization converged, and other info about this fit comparing the
-#'    measured gene expression in the sigGenes vs predicted gene expression in
-#'    the sigGenes.}
+#'    measured features vs predicted gene expression or chromatin accessibility in
+#'    the sigGenes or sigPeaks.}
 #' }
 #'
 #' @examples
-#' res1 <- EPIC(melanoma_data$counts)
+#' res1 <- EPIC(PBMC_ATAC_data$counts)
 #' res1$cellFractions
-#' res2 <- EPIC(melanoma_data$counts, TRef)
-#' res3 <- EPIC(bulk=melanoma_data$counts, reference=TRef)
-#' res4 <- EPIC(melanoma_data$counts, reference="TRef")
-#' res5 <- EPIC(melanoma_data$counts, mRNA_cell_sub=c(Bcells=1, otherCells=5))
+#' res2 <- EPIC(PBMC_ATAC_data$counts, BRef_ATAC)
+#' res3 <- EPIC(bulk = PBMC_ATAC_data$counts, reference = BRef_ATAC)
+#' res4 <- EPIC(PBMC_ATAC_data$counts, reference="BRef_ATAC")
 #' # Various possible ways of calling EPIC function. res 1 to 4 should
 #' # give exactly the same outputs, and the elements res1$cellFractions
 #' # should be equal to the example predictions found in
-#' # melanoma_data$cellFractions.pred for these first 4 results.
-#' # The values of cellFraction for res5 will be different due to the use of
-#' # other mRNA per cell values for the B and other cells.
+#' # PBMC_ATAC_data$cellFractions.pred for these first 4 results.
 #'
 #' @export
-EPIC <- function(bulk, reference=NULL, mRNA_cell=NULL, mRNA_cell_sub=NULL,
-                 sigGenes=NULL, scaleExprs=TRUE, withOtherCells=TRUE,
-                 constrainedSum=TRUE, rangeBasedOptim=FALSE){
+#'
+EPIC <- function(
+    bulk,
+    reference = NULL,
+    mRNA_cell = NULL,
+    mRNA_cell_sub = NULL,
+    sigGenes = NULL,
+    scaleExprs = TRUE,
+    withOtherCells = TRUE,
+    constrainedSum = TRUE,
+    rangeBasedOptim = FALSE,
+    ATAC = TRUE,
+    genome_version = "hg38",
+    nb_iter = 1000){
+  if(ATAC){
+    # the correction of the predictions by mRNA content is not performed for ATAC-Seq data, the mRNA_cell values are thus set to 1 for all cell types
+    mRNA_cell = c(otherCells=1, Macrophages=1, CD8_Tcells=1, NK=1, Endothelial=1, CD4_Tcells=1, Neutrophils=1, DCs=1, Bcells=1, Fibroblasts=1, Monocytes=1, default=1)
+  }
+
   # Checking the correct format of the bulk sample input
   if (!is.matrix(bulk) && !is.data.frame(bulk))
     stop("'bulk' needs to be given as a matrix or data.frame")
@@ -149,21 +177,30 @@ EPIC <- function(bulk, reference=NULL, mRNA_cell=NULL, mRNA_cell_sub=NULL,
   # 'reference'.
   with_w <- TRUE
   if (is.null(reference)){
-    reference <- EPIC::TRef
+    if(ATAC){
+      reference <- EPICatac::TRef_ATAC
+      reference[["sigGenes"]] <- reference$sigPeaks
+    }else{
+      reference <- EPICatac::TRef
+    }
   } else if (is.character(reference)){
     if (reference %in% prebuiltRefNames){
-      reference <- get(reference, pos="package:EPIC")
+      reference <- get(reference, pos = "package:EPIC")
+      if(ATAC){
+        reference[["sigGenes"]] <- reference$sigPeaks
+      }
       # Replace the char defining the reference name by the corresponding
       # pre-built reference values.
-    } else
+    }else{
       stop("The reference, '", reference, "' is not part of the allowed ",
            "references:", paste(prebuiltRefNames, collapse=", "))
+    }
   } else if (is.list(reference)){
     refListNames <- names(reference)
-    if ( (!all(c("refProfiles", "sigGenes") %in% refListNames)) ||
+    if ( (!(all(c("refProfiles", "sigGenes") %in% refListNames) || all(c("refProfiles", "sigPeaks") %in% refListNames))) ||
          (("refProfiles" %in% refListNames) && !is.null(sigGenes)) )
       stop("Reference, when given as a list needs to contain at least the ",
-           "fields 'refProfiles' and 'sigGenes' (sigGenes could also be ",
+           "fields 'refProfiles' and 'sigGenes' or 'sigPeaks' (sigGenes could also be ",
            "given as input to EPIC instead)")
     if (!is.matrix(reference$refProfiles) && !is.data.frame(reference$refProfiles))
       stop("'reference$refProfiles' needs to be given as a matrix or data.frame")
@@ -172,21 +209,22 @@ EPIC <- function(bulk, reference=NULL, mRNA_cell=NULL, mRNA_cell_sub=NULL,
               "for all genes")
       with_w <- FALSE
     } else if (!is.matrix(reference$refProfiles.var) &&
-          !is.data.frame(reference$refProfiles.var)){
+               !is.data.frame(reference$refProfiles.var)){
       stop("'reference$refProfiles.var' needs to be given as a matrix or ",
-        "data.frame when present.")
+           "data.frame when present.")
     } else if (!identical(dim(reference$refProfiles.var), dim(reference$refProfiles))
-         || !identical(dimnames(reference$refProfiles.var),
-                       dimnames(reference$refProfiles)))
+               || !identical(dimnames(reference$refProfiles.var),
+                             dimnames(reference$refProfiles)))
       stop("The dimensions and dimnames of 'reference$refProfiles' and ",
            "'reference$refProfiles.var' need to be the same")
+    reference[["sigGenes"]] <- reference$sigPeaks
   } else {
     stop("Unknown format for 'reference'")
   }
 
   bulk <- merge_duplicates(bulk, in_type="bulk samples")
   refProfiles <- merge_duplicates(reference$refProfiles,
-    in_type="reference profiles")
+                                  in_type = "reference profiles")
   if (with_w){
     refProfiles.var <- merge_duplicates(reference$refProfiles.var, warn=F)
     # Don't warn here as we're already warning for refProfile and they had same
@@ -203,16 +241,52 @@ EPIC <- function(bulk, reference=NULL, mRNA_cell=NULL, mRNA_cell_sub=NULL,
   nRefCells <- NCOL(refProfiles); refCellsNames <- colnames(refProfiles)
 
 
-  # Keeping only common genes and normalizing the counts based on these common
+  # Keeping only common features and normalizing the counts based on these common
   # genes
   bulk_NA <- apply(is.na(bulk), MARGIN=1, FUN=all)
   if (any(bulk_NA)){
     warning(sum(bulk_NA), " genes are NA in all bulk samples, removing these.")
     bulk <- bulk[!bulk_NA,]
   }
+
+  #**
+  #* If ATAC-Seq data are given as bulk input, make sure that the data are in hg38 coordinates
+  #* and match the bulk peaks with the peaks in the reference profiles
+  if(ATAC){
+    if (genome_version %in% c("hg19", "hg18")) {
+      message(paste0("Lifting over ", genome_version, "coordinates to hg38 ..."))
+      lifted_matrix <- run_liftOver(bulk_matrix = bulk, from = genome_version)
+      message("Done")
+    } else {
+      lifted_matrix <- bulk
+    }
+    message("Matching bulks peaks to the peaks in the reference profiles ...")
+    bulk <- match_peaks(bulk_matrix = lifted_matrix, profile_features = rownames(reference$refProfiles))
+    message("Done")
+
+
+    # Test whether each set of cell-type specific peaks has common regions with the open regions in the bulk data
+    nb_common_markers <- sapply(names(reference$markers), function(i){
+      common = reference$markers[[i]][which(reference$markers[[i]]  %in% rownames(bulk))]
+      return(length(common))
+    })
+
+    if(sum(nb_common_markers) == 0){
+      stop("No marker peaks in common with the open regions of the input bulk data.",
+           "Please refer to the FAQ to extract counts for each marker peaks in your data")
+    } else if(any(nb_common_markers <= 5)){
+      message("Warning: There are less then 5 marker peaks in common between the bulk data open regions and the cell-type specific marker peaks.\n ",
+              paste(paste0(names(nb_common_markers[which(nb_common_markers <= 5)]), ":",
+                          nb_common_markers[which(nb_common_markers <= 5)], " markers in common"),
+                     collapse = "; "))
+    }
+
+  }
+
   bulkGenes <- rownames(bulk)
   refGenes <- rownames(refProfiles)
   commonGenes <- intersect(bulkGenes, refGenes)
+
 
   if (is.null(sigGenes))
     sigGenes <- unique(reference$sigGenes) # Keep only once in case of duplicates
@@ -245,7 +319,7 @@ EPIC <- function(bulk, reference=NULL, mRNA_cell=NULL, mRNA_cell_sub=NULL,
   }
 
   if (is.null(mRNA_cell))
-    mRNA_cell <- EPIC::mRNA_cell_default
+    mRNA_cell <- EPICatac::mRNA_cell_default
 
   if (!is.null(mRNA_cell_sub)){
     if (is.null(names(mRNA_cell_sub)) || !is.numeric(mRNA_cell_sub))
@@ -318,10 +392,10 @@ EPIC <- function(bulk, reference=NULL, mRNA_cell=NULL, mRNA_cell_sub=NULL,
     b <- bulk[,cSample]
     if (!rangeBasedOptim){
       fit <- stats::constrOptim(theta = rep(cInitProp, nRefCells), f=minFun,
-                                grad=NULL, ui=ui, ci=ci, A=refProfiles, b=b, w=w)
+                                grad=NULL, ui=ui, ci=ci, A=refProfiles, b=b, w=w, control=list(maxit=nb_iter))
     } else {
       fit <- stats::constrOptim(theta = rep(cInitProp, nRefCells), f=minFun.range,
-            grad=NULL, ui=ui, ci=ci, A=refProfiles, b=b, A.var=refProfiles.var)
+                                grad=NULL, ui=ui, ci=ci, A=refProfiles, b=b, A.var=refProfiles.var, control=list(maxit=nb_iter))
     }
     fit$x <- fit$par
     if (!withOtherCells)
@@ -388,24 +462,29 @@ EPIC <- function(bulk, reference=NULL, mRNA_cell=NULL, mRNA_cell_sub=NULL,
   # Adding a row to the proportion matrix corresponding to the other /
   # uncharacterized / cancer cells.
 
-  tInds <- match(colnames(mRNAProportions), names(mRNA_cell))
-  if (anyNA(tInds)){
-    defaultInd <- match("default", names(mRNA_cell))
-    if (is.na(defaultInd)){
-      tStr <- paste(" and no default value is given for this mRNA per cell,",
-                    "so we cannot estimate the cellFractions, only",
-                    "the mRNA proportions")
-    } else {
-      tStr <- paste(" - using the default value of", mRNA_cell[defaultInd],
-                    "for these but this might bias the true cell proportions from",
-                    "all cell types.")
+  if(!ATAC){
+    tInds <- match(colnames(mRNAProportions), names(mRNA_cell))
+    if (anyNA(tInds)){
+      defaultInd <- match("default", names(mRNA_cell))
+      if (is.na(defaultInd)){
+        tStr <- paste(" and no default value is given for this mRNA per cell,",
+                      "so we cannot estimate the cellFractions, only",
+                      "the mRNA proportions")
+      } else {
+        tStr <- paste(" - using the default value of", mRNA_cell[defaultInd],
+                      "for these but this might bias the true cell proportions from",
+                      "all cell types.")
+      }
+      warning("mRNA_cell value unknown for some cell types: ",
+              paste(colnames(mRNAProportions)[is.na(tInds)], collapse=", "),
+              tStr)
+      tInds[is.na(tInds)] <- defaultInd
     }
-    warning("mRNA_cell value unknown for some cell types: ",
-            paste(colnames(mRNAProportions)[is.na(tInds)], collapse=", "),
-            tStr)
-    tInds[is.na(tInds)] <- defaultInd
+    cellFractions <- t( t(mRNAProportions) / mRNA_cell[tInds])
+  } else {
+    cellFractions <- mRNAProportions
   }
-  cellFractions <- t( t(mRNAProportions) / mRNA_cell[tInds])
+
   cellFractions <- cellFractions / rowSums(cellFractions, na.rm=FALSE)
   # So that the cell fractions sum up to 1. In case some values were NA (due
   # to unknown mRNA_cell value for some cell types without default value), then
@@ -413,8 +492,14 @@ EPIC <- function(bulk, reference=NULL, mRNA_cell=NULL, mRNA_cell_sub=NULL,
   # sum of the other than "NA" cells equal to 1 as if this "NA" cell was not
   # present in the sample.
 
-  return(list(mRNAProportions=mRNAProportions, cellFractions=cellFractions,
-              fit.gof=fit.gof))
+  if(ATAC){
+    return(list(cellFractions=cellFractions,
+                fit.gof=fit.gof))
+  } else{
+    return(list(mRNAProportions=mRNAProportions, cellFractions=cellFractions,
+                fit.gof=fit.gof))
+  }
+
 }
 
 #' Scaling raw counts from each sample.
@@ -426,7 +511,8 @@ EPIC <- function(bulk, reference=NULL, mRNA_cell=NULL, mRNA_cell_sub=NULL,
 #' if it sigGenes is \code{NULL}), with the scaled counts computed based on all
 #' the 'renormGenes' (or all genes if it is NULL). The renormalization is made
 #' independently for each sample, to have the sum of each columns over the
-#' renormGenes equal to 1e6.
+#' renormGenes equal to 1e6. For ATAC-Seq data chromatin accessible regions (peaks)
+#' replace the genes.
 #'
 #' normFact, if not null, is used as the normalization factor instead of
 #'  the colSums (used to renormalize the refProfiles.var by the same amount
@@ -438,9 +524,9 @@ scaleCounts <- function(counts, sigGenes=NULL, renormGenes=NULL, normFact=NULL){
     sigGenes <- 1:nrow(counts)
 
   if (is.null(normFact)){
-      if (is.null(renormGenes))
-        renormGenes <- 1:nrow(counts)
-      normFact <- colSums(counts[renormGenes,,drop=FALSE], na.rm=TRUE)
+    if (is.null(renormGenes))
+      renormGenes <- 1:nrow(counts)
+    normFact <- colSums(counts[renormGenes,,drop=FALSE], na.rm=TRUE)
   }
   counts <- t( t(counts[sigGenes,,drop=FALSE]) / normFact) * 1e6
   # Need to take the transpose so that the division is made on the correct
@@ -464,8 +550,8 @@ merge_duplicates <- function(mat, warn=TRUE, in_type=NULL){
     dupl_genes <- unique(rownames(mat)[dupl])
     if (warn){
       warning("There are ", length(dupl_genes), " duplicated gene names",
-        ifelse(!is.null(in_type), paste(" in the", in_type), ""),
-        ". We'll use the median value for each of these cases.")
+              ifelse(!is.null(in_type), paste(" in the", in_type), ""),
+              ". We'll use the median value for each of these cases.")
     }
     mat_dupl <- mat[rownames(mat) %in% dupl_genes,,drop=F]
     mat_dupl_names <- rownames(mat_dupl)
@@ -476,4 +562,140 @@ merge_duplicates <- function(mat, warn=TRUE, in_type=NULL){
       apply(mat_dupl[mat_dupl_names == cgene,,drop=F], MARGIN=2, FUN=median)))
   }
   return(mat)
+}
+
+
+#' Converting open chromatin regions (i.e. peaks) to GRanges objects.
+#'
+#' @param regions : vector of coordinates in the following format: "chr-start-end".
+#' @param sep (optional, default is c("-", "-"): a vector of length 2 containing the separators used in the coordinates
+#'
+#' @return a GRanges object.
+#'
+#' @keywords internal
+StringToGRanges <- function(regions, sep = c("-", "-"), ...){
+  ranges.df <- data.frame(ranges = regions)
+  ranges.df <- tidyr::separate(data = ranges.df, col = "ranges", sep = paste0(sep[[1]], "|", sep[[2]]), into = c("chr", "start", "end"))
+  rownames(ranges.df) <- regions
+  granges <- GenomicRanges::makeGRangesFromDataFrame(df = ranges.df, ...)
+  return(granges)
+}
+
+#' LiftOver of the peaks coordinates of the input matrix.
+#'
+#' If the peaks coordinates of the input matrix are in hg19, they will be
+#' lifted over hg38, which correspond to the genome used for the generation of
+#' ATAC-Seq reference profiles.
+#'
+#' @param bulk_matrix : matrix corresponding to the ATAC-Seq bulk data to deconvolve.
+#' @param from (optional, default is hg19): the genome version associated to the regions/rownames of bulk_matrix
+#'
+#' @return The matrix with lifted coordinates as rownames.
+#'
+#' @keywords internal
+run_liftOver <- function(bulk_matrix, from = "hg19"){
+
+  peaks_gr <- StringToGRanges(rownames(bulk_matrix), sep = c("[:-]","-"))
+  peaks_gr$id <- rownames(bulk_matrix)
+
+  # Lift over coordinates
+  if(from == "hg19"){
+    ch <- EPICatac::liftover_chains$hg19_to_hg38_chain
+  }else if(from == "hg18"){
+    ch <- EPICatac::liftover_chains$hg18_to_hg38_chain
+  }
+
+  GenomeInfoDb::seqlevelsStyle(ch) <- "UCSC"
+  regions_gr_converted <- unlist(rtracklayer::liftOver(peaks_gr, ch))
+
+  new_regions <- data.frame(
+    chr = regions_gr_converted@seqnames,
+    start = rtracklayer::start(regions_gr_converted),
+    end = rtracklayer::end(regions_gr_converted),
+    id = regions_gr_converted$id
+  )
+
+  # remove duplicated regions
+  if(sum(duplicated(new_regions$id)) != 0){
+    new_regions <- new_regions[-which(duplicated(new_regions$id)), ]
+  }
+
+  new_regions$new_names <- paste0(new_regions$chr, "-", new_regions$start, "-", new_regions$end)
+  rownames(new_regions) <- new_regions$id
+
+  # remove duplicated regions
+  if(sum(duplicated(new_regions$new_names)) != 0){
+    new_regions <- new_regions[-which(duplicated(new_regions$new_names)), ]
+  }
+
+  lifted_matrix <- bulk_matrix[which(rownames(bulk_matrix) %in% new_regions$id),,drop = F]
+  rownames(lifted_matrix) <- new_regions[rownames(lifted_matrix), "new_names"]
+
+  return(lifted_matrix)
+}
+
+
+#' Matching the peaks coordinates of the input matrix with the peaks of the ATAC-Seq reference profiles.
+#'
+#' @param bulk_matrix : matrix corresponding to the ATAC-Seq bulk data to deconvolve.
+#' @param bulk_matrix : matrix corresponding to the ATAC-Seq bulk data to deconvolve.
+#' @param distance (optional, default is 0): minimum distance to consider two regions as overlapping.
+#'
+#' @return The matrix with lifted coordinates as rownames.
+#'
+#' @keywords internal
+match_peaks <- function(bulk_matrix, profile_features, distance = 0){
+
+  if(!is.data.frame(bulk_matrix)){
+    bulk_matrix = as.data.frame(bulk_matrix)
+  }
+
+  regions.1 <- StringToGRanges(rownames(bulk_matrix), sep = c("[:-]","-"))
+  regions.2 <- StringToGRanges(profile_features, sep = c("[:-]","-"))
+
+  region.intersections <- GenomicRanges::distanceToNearest(x = regions.1,
+                                                           subject = regions.2)
+  keep.intersections <- GenomicRanges::mcols(x = region.intersections)$distance <= distance
+  region.intersections <- region.intersections[keep.intersections, ]
+  intersect.object1 <- S4Vectors::queryHits(x = region.intersections)
+  intersect.object2 <- S4Vectors::subjectHits(x = region.intersections)
+
+  # Keep bulk features intersecting the reference features
+  bulk_matrix <- bulk_matrix[intersect.object1, , drop = F]
+
+  # Aggregate counts if multiple bulk features were intersecting a feature of the reference
+  bulk_matrix$new_peaks <- profile_features[intersect.object2]
+  bulk_matrix <- aggregate(. ~ new_peaks, data = bulk_matrix, FUN = sum)
+  rownames(bulk_matrix) <- bulk_matrix$new_peaks
+  bulk_matrix <- bulk_matrix[, 2:ncol(bulk_matrix), drop = F]
+
+  # Renormalize bulk matrix
+  region.length = regions.2@ranges@width
+  names(region.length) = names(regions.2@ranges)
+  x <-  bulk_matrix / region.length[rownames(bulk_matrix)]
+  bulk_matrix <- t(t(x) * 1e6 / colSums(x))
+  rm(x)
+  return(bulk_matrix)
+}
+
+
+#' Normalizing raw ATAC-Seq counts using a TPM-like apporach.
+#'
+#' @param raw_counts : raw counts matrix (\emph{peaks} x \emph{samples}).
+#'
+#' @return a normalized matrix (\emph{peaks} x \emph{samples}).
+#'
+#' @keywords internal
+get_TPMlike_counts <- function(raw_counts){
+  # get width of the open regions/peaks
+  peaks_gr <- StringToGRanges(gsub(":", "-", rownames(raw_counts)), sep = c("-","-"))
+  region.length = peaks_gr@ranges@width
+  names(region.length) = rownames(raw_counts)
+
+  # correct counts by region length
+  norm_counts <-  counts / region.length[rownames(counts)]
+
+  # correct counts by total number of counts per sample
+  norm_counts <- t(t(norm_counts) * 1e6 / colSums(norm_counts))
+  return(norm_counts)
 }
