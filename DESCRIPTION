@@ -1,27 +1,35 @@
-Package: EPIC
+Package: EPICatac
 Type: Package
-Title: Estimate the Proportion of Immune and Cancer cells
-Version: 1.1.6
+Title: Estimate the Proportion of Immune and Cancer cells in ATAC-Seq data
+Version: 1.0
 Authors@R: as.person(c(
-  "Julien Racle <julien.racle@unil.ch> [aut, cre]",
+  "Aurélie Gabriel <aurelie.gabriel@unil.ch> [aut, cre]",
+  "Julien Racle <julien.racle@unil.ch> [aut]",
   "David Gfeller <david.gfeller@unil.ch> [aut]"
   ))
 Description: Package implementing EPIC method to estimate the proportion of
-    immune, stromal, endothelial and cancer or other cells from bulk gene
+    immune, stromal, endothelial and cancer or other cells from bulk chromatin accessibility or gene
     expression data.
-    It is based on reference gene expression profiles for the main non-malignant
+    It is based on reference profiles for the main non-malignant
     cell types and it predicts the proportion of these cells and of the
     remaining "other cells" (that are mostly cancer cells) for which no
     reference profile is given.
 Depends:
-    R (>= 3.2.0)
+    R (>= 4.0)
 License: file LICENSE
+Encoding: UTF-8
 LazyData: TRUE
 RoxygenNote: 7.2.1
+biocViews:
+    Software, ExperimentData, Annotation
 Suggests:
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    remotes
 Imports:
-    stats
+    stats,
+    GenomicRanges,
+    rtracklayer,
+    liftOver
 VignetteBuilder: knitr
