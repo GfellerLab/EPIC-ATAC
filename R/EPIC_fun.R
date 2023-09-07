@@ -561,7 +561,7 @@ merge_duplicates <- function(mat, warn=TRUE, in_type=NULL){
     # First put the dupl cases in a separate matrix and keep only the unique
     # gene names in the mat matrix.
     mat[dupl_genes,] <- t(sapply(dupl_genes, FUN=function(cgene)
-      apply(mat_dupl[mat_dupl_names == cgene,,drop=F], MARGIN=2, FUN=median)))
+      apply(mat_dupl[mat_dupl_names == cgene,,drop=F], MARGIN=2, FUN=stats::median)))
   }
   return(mat)
 }
@@ -667,7 +667,7 @@ match_peaks <- function(bulk_matrix, profile_features, distance = 0){
 
   # Aggregate counts if multiple bulk features were intersecting a feature of the reference
   bulk_matrix$new_peaks <- profile_features[intersect.object2]
-  bulk_matrix <- aggregate(. ~ new_peaks, data = bulk_matrix, FUN = sum)
+  bulk_matrix <- stats::aggregate(. ~ new_peaks, data = bulk_matrix, FUN = sum)
   rownames(bulk_matrix) <- bulk_matrix$new_peaks
   bulk_matrix <- bulk_matrix[, 2:ncol(bulk_matrix), drop = F]
 
@@ -695,7 +695,7 @@ get_TPMlike_counts <- function(raw_counts){
   names(region.length) = rownames(raw_counts)
 
   # correct counts by region length
-  norm_counts <-  counts / region.length[rownames(counts)]
+  norm_counts <-  raw_counts / region.length[rownames(raw_counts)]
 
   # correct counts by total number of counts per sample
   norm_counts <- t(t(norm_counts) * 1e6 / colSums(norm_counts))
