@@ -217,7 +217,9 @@ EPIC <- function(
                              dimnames(reference$refProfiles)))
       stop("The dimensions and dimnames of 'reference$refProfiles' and ",
            "'reference$refProfiles.var' need to be the same")
-    reference[["sigGenes"]] <- reference$sigPeaks
+    if(ATAC){
+      reference[["sigGenes"]] <- reference$sigPeaks
+    }
   } else {
     stop("Unknown format for 'reference'")
   }
