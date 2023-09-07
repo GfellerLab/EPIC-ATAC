@@ -16,7 +16,7 @@ This is a list of 3 elements: \describe{
    "other_cells" correspond to the live cells without any marker of the
    other given cell types).}
  \item{$cellFractions.pred}{(matrix of 5 donors x 6 cell types) The
-   proportions of the different cell types, as predicted by EPICatac based on
+   proportions of the different cell types, as predicted by EPICATAC based on
    the reference profiles \code{BRef_ATAC}.}
 }
 }

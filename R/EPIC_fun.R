@@ -1,6 +1,6 @@
 # ####################################'
 #
-# Package EPIC_ATAC - adapted by Aurélie Gabriel from the package EPIC developed by Julien Racle
+# Package EPICATAC - adapted by Aurélie Gabriel from the package EPIC developed by Julien Racle
 # from David Gfeller's group of the University of Lausanne and Ludwig Institute for Cancer Research.
 # Copyrights remain reserved as described in the included LICENSE file.
 #
@@ -178,14 +178,14 @@ EPIC <- function(
   with_w <- TRUE
   if (is.null(reference)){
     if(ATAC){
-      reference <- EPICatac::TRef_ATAC
+      reference <- EPICATAC::TRef_ATAC
       reference[["sigGenes"]] <- reference$sigPeaks
     }else{
-      reference <- EPICatac::TRef
+      reference <- EPICATAC::TRef
     }
   } else if (is.character(reference)){
     if (reference %in% prebuiltRefNames){
-      reference <- get(reference, pos = "package:EPIC")
+      reference <- get(reference, pos = "package:EPICATAC")
       if(ATAC){
         reference[["sigGenes"]] <- reference$sigPeaks
       }
@@ -321,7 +321,7 @@ EPIC <- function(
   }
 
   if (is.null(mRNA_cell))
-    mRNA_cell <- EPICatac::mRNA_cell_default
+    mRNA_cell <- EPICATAC::mRNA_cell_default
 
   if (!is.null(mRNA_cell_sub)){
     if (is.null(names(mRNA_cell_sub)) || !is.numeric(mRNA_cell_sub))
@@ -602,9 +602,9 @@ run_liftOver <- function(bulk_matrix, from = "hg19"){
 
   # Lift over coordinates
   if(from == "hg19"){
-    ch <- EPICatac::liftover_chains$hg19_to_hg38_chain
+    ch <- EPICATAC::liftover_chains$hg19_to_hg38_chain
   }else if(from == "hg18"){
-    ch <- EPICatac::liftover_chains$hg18_to_hg38_chain
+    ch <- EPICATAC::liftover_chains$hg18_to_hg38_chain
   }
 
   GenomeInfoDb::seqlevelsStyle(ch) <- "UCSC"

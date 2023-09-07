@@ -1,4 +1,4 @@
-Package: EPICatac
+Package: EPICATAC
 Type: Package
 Title: Estimate the Proportion of Immune and Cancer cells in ATAC-Seq data
 Version: 1.0
@@ -20,7 +20,7 @@ License: file LICENSE
 Encoding: UTF-8
 LazyData: TRUE
 RoxygenNote: 7.2.3
-biocViews:
+biocViews: 
     Software, ExperimentData, Annotation
 Suggests:
     testthat,

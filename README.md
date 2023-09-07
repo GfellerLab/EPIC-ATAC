@@ -1,4 +1,4 @@
-EPICatac package
+EPICATAC package
 ================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -7,7 +7,7 @@ EPICatac package
 
 Package implementing EPIC method to estimate the proportion of immune,
 stromal, endothelial and cancer or other cells from bulk chromatin
-accessibility data (ATAC-Seq). EPICatac is based on reference ATAC-Seq
+accessibility data (ATAC-Seq). EPICATAC is based on reference ATAC-Seq
 profiles for the main non-malignant cell types and it predicts the
 proportion of these cells and of the remaining “other cells” (that are
 mostly cancer cells) for which no reference profile is given.
@@ -16,7 +16,7 @@ This framework relies on the implementation of EPIC previously developed
 for bulk RNA-Seq data deconvolution and described in the publication
 from *Racle et al., 2017* available at
 <https://elifesciences.org/articles/26476>. Note that RNA-Seq data can
-also be given as input to the EPICatac package.
+also be given as input to the EPICATAC package.
 
 ## Usage
 
@@ -26,7 +26,7 @@ which to estimate cell proportions. One can also define the reference
 cells to use
 
 ``` r
-# library(EPICatac) ## If the package isn't loaded (or use EPICatac::EPIC and so on).
+# library(EPICATAC) ## If the package isn't loaded (or use EPICATAC::EPIC and so on).
 out <- EPIC(bulk = PBMC_ATAC_data, reference = BRef_ATAC, ATAC = TRUE)
 ```
 
@@ -37,25 +37,25 @@ Various other options are available and are well documented in the help
 pages from EPIC:
 
 ``` r
-?EPICatac::EPIC
-?EPICatac::EPICatac.package
+?EPICATAC::EPIC
+?EPICATAC::EPICATAC.package
 ```
 
 ## Installation
 
 ``` r
 install.packages("devtools")
-devtools::install_github("GfellerLab/EPICatac", build_vignettes=TRUE)
+devtools::install_github("GfellerLab/EPICATAC", build_vignettes=TRUE)
 ```
 
 ## License
 
-EPICatac can be used freely by academic groups for non-commercial
+EPICATAC can be used freely by academic groups for non-commercial
 purposes. The product is provided free of charge, and, therefore, on an
 “*as is*” basis, without warranty of any kind. Please read the file
 “*LICENSE*” for details.
 
-If you plan to use EPICatac (version 1.1) in any for-profit application,
+If you plan to use EPICATAC (version 1.0) in any for-profit application,
 you are required to obtain a separate license. To do so, please contact
 Nadette Bulgin (<nbulgin@lcr.org>) at the Ludwig Institute for Cancer
 Research Ltd.
@@ -69,11 +69,11 @@ Aurélie Gabriel (<aurelie.gabriel@unil.ch>), Julien Racle
 
 ##### What do the “*otherCells*” represent?
 
--   EPICatac predicts the proportions of the various cell types for
+-   EPICATAC predicts the proportions of the various cell types for
     which we have reference profiles (and corresponding cell-type
     specific markers). But, depending on the bulk sample, it is possible
     that some other cell types are present for which we don’t have any
-    reference profile. EPICatac returns the proportion of these
+    reference profile. EPICATAC returns the proportion of these
     remaining cells under the name “*otherCells*”. In the case of tumor
     samples, most of these other cells would certainly correspond to the
     cancer cells, but it could be that there are also some stromal cells
@@ -93,7 +93,7 @@ Aurélie Gabriel (<aurelie.gabriel@unil.ch>), Julien Racle
     cell-types are not present in the bulk samples or in low proportions
     and that no open regions specific to these cell-types were detected
     when performing peak calling at the bulk level. High proportions of
-    these cell-types predicted by EPICatac should be considered with
+    these cell-types predicted by EPICATAC should be considered with
     caution.
 
 ##### What is the meaning of the error message telling that none of the marker peaks are in common with the bulk data?
@@ -113,7 +113,7 @@ then be passed to the get_TPMlike_counts function to obtain normalized
 counts that can be used for deconvolution.
 
 ``` r
-# library(EPICatac) ## If the package isn't loaded (or use EPICatac::EPIC and so on).
+# library(EPICATAC) ## If the package isn't loaded (or use EPICATAC::EPIC and so on).
 counts = read.table("featureCounts.txt", skip = 1, header = T)
 rownames(counts) = counts$Geneid
 counts = counts[, c(7:ncol(counts))]
@@ -123,7 +123,7 @@ out <- EPIC(bulk = normalized_counts, reference = BRef_ATAC, ATAC = TRUE)
 
 ##### I receive a warning message that “*the optimization didn’t fully converge for some samples*”. What does it mean?
 
--   When estimating the cell proportions EPICatac performs a least
+-   When estimating the cell proportions EPICATAC performs a least
     square regression between the observed gene expression or peaks
     accessibility of the cell-type specific markers and the expression
     or accessibility of these markers predicted based on the estimated

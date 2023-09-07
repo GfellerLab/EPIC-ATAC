@@ -1,14 +1,14 @@
-#' EPICatac: a package to Estimate the Proportion of Immune and Cancer cells from
+#' EPICATAC: a package to Estimate the Proportion of Immune and Cancer cells from
 #'  tumor gene expression data.
 #'
-#' EPICatac package provides the function and cell reference profiles to
+#' EPICATAC package provides the function and cell reference profiles to
 #' estimate the proportion of immune, stromal, endothelial and cancer or other
 #' cells from bulk chromatin accessibility data (ATAC-Seq).
 #'
 #' See the package \link[=../doc/info.html]{vignette} and function definitions
 #' below.
 #'
-#' @section EPICatac functions:
+#' @section EPICATAC functions:
 #' \code{\link{EPIC}} is the main function to call to estimate the
 #'  various cells proportions from a bulk sample.
 #'
@@ -39,7 +39,7 @@
 #' <\email{david.gfeller@unil.ch}>.
 #'
 #' @docType package
-#' @name EPICatac.package
+#' @name EPICATAC.package
 NULL
 
 #' ATAC-Seq reference profiles containing cell-types found in peripheral blood mononuclear cells (PBMCs).
@@ -204,7 +204,7 @@ NULL
 #'    "other_cells" correspond to the live cells without any marker of the
 #'    other given cell types).}
 #'  \item{$cellFractions.pred}{(matrix of 5 donors x 6 cell types) The
-#'    proportions of the different cell types, as predicted by EPICatac based on
+#'    proportions of the different cell types, as predicted by EPICATAC based on
 #'    the reference profiles \code{BRef_ATAC}.}
 #' }
 #'
