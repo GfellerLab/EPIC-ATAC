@@ -15,7 +15,7 @@ Description: Package implementing EPIC method to estimate the proportion of
     remaining "other cells" (that are mostly cancer cells) for which no
     reference profile is given.
 Depends:
-    R (>= 4.0)
+    R (>= 4.1)
 License: file LICENSE
 Encoding: UTF-8
 LazyData: TRUE
@@ -30,6 +30,5 @@ Suggests:
 Imports:
     stats,
     GenomicRanges,
-    rtracklayer,
-    liftOver
+    rtracklayer
 VignetteBuilder: knitr
