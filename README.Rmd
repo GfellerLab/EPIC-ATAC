@@ -27,7 +27,8 @@ at <https://elifesciences.org/articles/26476>. Note that RNA-Seq data can also b
 ## Installation
 To install EPICATAC, run the following lines in R:
 ```{r, eval = FALSE}
-remotes::install_github("GfellerLab/EPIC-ATAC")
+install.packages("devtools")
+devtools::install_github("GfellerLab/EPIC-ATAC", build_vignettes=TRUE)
 ```
 
 ## Usage
@@ -48,12 +49,6 @@ from EPIC:
 ?EPICATAC::EPICATAC.package
 ```
 
-
-## Installation
-```{r, eval = FALSE}
-install.packages("devtools")
-devtools::install_github("GfellerLab/EPIC-ATAC", build_vignettes=TRUE)
-```
 
 ## License
 EPICATAC can be used freely by academic groups for non-commercial purposes. The
