@@ -24,6 +24,12 @@ given.
 This framework is an extension of EPIC previously developed for bulk RNA-Seq data deconvolution and described in the publication from *Racle et al., 2017* available
 at <https://elifesciences.org/articles/26476>. Note that RNA-Seq data can also be given as input to the EPICATAC package.
 
+## Installation
+To install EPICATAC, run the following lines in R:
+```{r, eval = FALSE}
+remotes::install_github("GfellerLab/EPIC-ATAC")
+```
+
 ## Usage
 The main function in this package is `EPIC`. It needs as input a matrix of (or the
 TPM (or RPKM) for gene expression data) from the samples for which to estimate cell
