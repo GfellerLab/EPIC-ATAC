@@ -1,5 +1,5 @@
 ---
-title: "EPICATAC package"
+title: "EPIC-ATAC"
 output: github_document
 ---
 
