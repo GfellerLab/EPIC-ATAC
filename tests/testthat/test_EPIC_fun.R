@@ -2,21 +2,23 @@ context("Testing EPIC function")
 
 test_that("Test of bad inputs", {
           a <- matrix(1:20, nrow=5)
-          expect_error(EPIC(bulk=a), "There are only 0 signature")
+          expect_error(EPIC(bulk=a, ATAC = F), "There are only 0 signature")
           refStr <- "unknownRef"
-          expect_error(EPIC(bulk=melanoma_data$counts, reference=refStr),
+          expect_error(EPIC(bulk=melanoma_data$counts, reference=refStr, ATAC = F),
                        paste0(refStr, ".* not part of the allowed references"))
           tRef <- BRef; tRef$sigGenes <- NULL
-          expect_error(EPIC(bulk=melanoma_data$counts, reference=tRef),
+          expect_error(EPIC(bulk=melanoma_data$counts, reference=tRef, ATAC = F),
                        "needs to contain .* 'sigGenes'")
           tRef <- BRef;
           tRef$refProfiles.var <- tRef$refProfiles.var[
             nrow(tRef$refProfiles.var):1,]
-          expect_error(EPIC(bulk=melanoma_data$counts, reference=tRef),
+          expect_error(EPIC(bulk=melanoma_data$counts, reference=tRef, ATAC = F),
                        "dimnames of .*refProfiles.*refProfiles.var.*same")
 })
 
 test_that("Test for correct result on melanoma data with default input", {
-  testFract <- EPIC(melanoma_data$counts)$cellFractions
+  testFract <- EPIC(melanoma_data$counts, ATAC = F, nb_iter = 500)$cellFractions
   expect_equal(testFract, melanoma_data$cellFractions.pred)
 })
+
+

@@ -1,4 +1,4 @@
 library(testthat)
-library(EPIC)
+library(EPICATAC)
 
-test_check("EPIC")
+test_check("EPICATAC")
