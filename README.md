@@ -110,11 +110,18 @@ Aurélie Gabriel (<aurelie.gabriel@unil.ch>), Julien Racle
 featureCounts -F SAF -O --fracOverlap 0.2 -T 1 -p -a markerPeaks.saf -o featureCounts.txt bam_files
 ```
 
-In the previous command line, the file “*markerPeaks.saf*” contains the
-coordinates of our marker peaks and this file is available and bam_files
-correspond to your samples bam files. The “*featureCounts.txt*” file can
-then be passed to the get_TPMlike_counts function to obtain normalized
-counts that can be used for deconvolution.
+In the previous command line, he bam_files correspond to your samples
+bam files and the file “*markerPeaks.saf*” contains the coordinates
+(hg38) of our marker peaks. This file is available in the EPICATAC
+package and the file path can be retrieved using:
+
+``` r
+system.file("extdata", "markerPeaks.saf", package="EPICATAC")
+```
+
+The “*featureCounts.txt*” file can then be passed to the
+get_TPMlike_counts function to obtain normalized counts that can be used
+for deconvolution.
 
 ``` r
 # library(EPICATAC) ## If the package isn't loaded (or use EPICATAC::EPIC and so on).
