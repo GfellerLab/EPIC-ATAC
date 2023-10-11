@@ -15,8 +15,10 @@ mostly cancer cells) for which no reference profile is given.
 This framework is an extension of EPIC previously developed for bulk
 RNA-Seq data deconvolution and described in the publication from *Racle
 et al., 2017* available at <https://elifesciences.org/articles/26476>.
-Note that RNA-Seq data can also be given as input to the EPICATAC
-package.
+We recommend loading the EPIC package for RNA-Seq deconvolution and
+EPICATAC for ATAC-Seq deconvolution to avoid conflicts between EPIC and
+EPICATAC functions, in particular EPIC should not be loaded before
+EPICATAC in order to use EPICATAC functions.
 
 ## Installation
 
@@ -36,7 +38,7 @@ cells to use
 
 ``` r
 # library(EPICATAC) ## If the package isn't loaded (or use EPICATAC::EPIC and so on).
-out <- EPIC(bulk = PBMC_ATAC_data$counts, reference = BRef_ATAC, ATAC = TRUE, withOtherCells = F)
+out <- EPIC(bulk = PBMC_ATAC_data$counts, reference = BRef_ATAC, ATAC = TRUE)
 ```
 
 `out` is a list containing the various cell fractions in each samples as
