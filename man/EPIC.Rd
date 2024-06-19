@@ -32,11 +32,11 @@ doesn't make any difference).}
 \item{reference}{(optional): A string or a list defining the reference cells.
 It can take multiple formats, either: \itemize{
   \item\code{NULL}: to use the default reference profiles and
-    markers in \code{\link{TRef}} for RNA-Seq deconvolution or in \code{\link{TRef_ATAC}}
+    markers in \code{\link{TRef}} for RNA-Seq deconvolution or in \code{\link{atacRef_TME}}
   \item a char: either \emph{"BRef"} or \emph{"TRef"} for RNA-Seq data deconvolution or
-     \emph{"BRef_ATAC"} or  \emph{"TRef_ATAC"} for ATAC-Seq data deconvolution
+     \emph{"atacRef_PBMC"} or  \emph{"atacRef_TME"} for ATAC-Seq data deconvolution
     to use the reference cells and markers of the corresponding
-    datasets (see \code{\link{BRef}}, \code{\link{TRef}}, \code{\link{BRef_ATAC}}, \code{\link{TRef_ATAC}}).
+    datasets (see \code{\link{BRef}}, \code{\link{TRef}}, \code{\link{atacRef_PBMC}}, \code{\link{atacRef_TME}}).
   \item a list. When a list it should include: \describe{
     \item{\code{$refProfiles}}{a matrix (\code{nFeatures} x \code{nCellTypes})
     of the reference cells genes expression or peak accessibility (don't include a column of
@@ -167,9 +167,9 @@ these cases differently, you can remove the duplicates before calling
 \examples{
 res1 <- EPIC(PBMC_ATAC_data$counts)
 res1$cellFractions
-res2 <- EPIC(PBMC_ATAC_data$counts, BRef_ATAC)
-res3 <- EPIC(bulk = PBMC_ATAC_data$counts, reference = BRef_ATAC)
-res4 <- EPIC(PBMC_ATAC_data$counts, reference="BRef_ATAC")
+res2 <- EPIC(PBMC_ATAC_data$counts, atacRef_PBMC)
+res3 <- EPIC(bulk = PBMC_ATAC_data$counts, reference = atacRef_PBMC)
+res4 <- EPIC(PBMC_ATAC_data$counts, reference="atacRef_PBMC")
 # Various possible ways of calling EPIC function. res 1 to 4 should
 # give exactly the same outputs, and the elements res1$cellFractions
 # should be equal to the example predictions found in

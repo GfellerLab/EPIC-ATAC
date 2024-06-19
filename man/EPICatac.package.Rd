@@ -22,9 +22,9 @@ below.
 
 \section{Included datasets}{
 
-\code{\link{BRef_ATAC}}: reference profiles for ATAC-Seq deconvolution of PBMCs datasets.
+\code{\link{atacRef_PBMC}}: reference profiles for ATAC-Seq deconvolution of PBMCs datasets.
 
-\code{\link{TRef_ATAC}}: reference profiles for ATAC-Seq deconvolution of tumor samples.
+\code{\link{atacRef_TME}}: reference profiles for ATAC-Seq deconvolution of tumor samples.
 
 \code{\link{BRef}}: reference profiles from circulating immune cells for RNA-Seq deconvolution.
 

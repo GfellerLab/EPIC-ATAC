@@ -17,7 +17,7 @@ This is a list of 3 elements: \describe{
    other given cell types).}
  \item{$cellFractions.pred}{(matrix of 5 donors x 6 cell types) The
    proportions of the different cell types, as predicted by EPICATAC based on
-   the reference profiles \code{BRef_ATAC}.}
+   the reference profiles \code{atacRef_PBMC}.}
 }
 }
 \source{

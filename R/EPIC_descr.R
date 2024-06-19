@@ -13,9 +13,9 @@
 #'  various cells proportions from a bulk sample.
 #'
 #' @section Included datasets:
-#' \code{\link{BRef_ATAC}}: reference profiles for ATAC-Seq deconvolution of PBMCs datasets.
+#' \code{\link{atacRef_PBMC}}: reference profiles for ATAC-Seq deconvolution of PBMCs datasets.
 #'
-#' \code{\link{TRef_ATAC}}: reference profiles for ATAC-Seq deconvolution of tumor samples.
+#' \code{\link{atacRef_TME}}: reference profiles for ATAC-Seq deconvolution of tumor samples.
 #'
 #' \code{\link{BRef}}: reference profiles from circulating immune cells for RNA-Seq deconvolution.
 #'
@@ -56,7 +56,7 @@ NULL
 #'   TPM-like counts) from the reference cells and the variability of this chromatin
 #'   accessibility for each peak and each cell type} \item{$sigPeaks}{A list of
 #'   marker peaks used to deconvolve the cell proportions} }
-"BRef_ATAC"
+"atacRef_PBMC"
 
 #' ATAC-Seq reference profiles containing cancer-relevant cell-types.
 #'
@@ -72,7 +72,7 @@ NULL
 #'   TPM-like counts) from the reference cells and the variability of this chromatin
 #'   accessibility for each peak and each cell type} \item{$sigGenes}{A list of
 #'   marker peaks used to deconvolve the cell proportions} }
-"TRef_ATAC"
+"atacRef_TME"
 
 #' Chains to lift over hg19 or hg18 coordinates.
 #'
@@ -205,7 +205,7 @@ NULL
 #'    other given cell types).}
 #'  \item{$cellFractions.pred}{(matrix of 5 donors x 6 cell types) The
 #'    proportions of the different cell types, as predicted by EPICATAC based on
-#'    the reference profiles \code{BRef_ATAC}.}
+#'    the reference profiles \code{atacRef_PBMC}.}
 #' }
 #'
 #' @source \url{...}

@@ -1,10 +1,10 @@
 ---
-title: "EPIC-ATAC"
+title: "EPICATAC package"
 author: "Aurélie Gabriel, Julien Racle and David Gfeller"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{EPICatac package}
+  %\VignetteIndexEntry{EPICATAC package}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -32,13 +32,13 @@ TPM (or RPKM) for gene expression data) from the samples for which to estimate c
 proportions. One can also define the reference cells to use
 ```{r, eval = FALSE}
 # library(EPICATAC) ## If the package isn't loaded (or use EPICATAC::EPIC and so on).
-out <- EPIC(bulk = PBMC_ATAC_data$counts, reference = BRef_ATAC, ATAC = TRUE, withOtherCells = F)
+out <- EPIC(bulk = PBMC_ATAC_data$counts, reference = atacRef_PBMC, ATAC = TRUE, withOtherCells = F)
 ```
 
 `out` is a list containing the various cell fractions in each samples as well as some *data.frame* of the goodness of fit.
 
 Various other options are available and are well documented in the help pages
-from EPIC:
+from EPICATAC:
 ```{r, eval = FALSE}
 ?EPICATAC::EPIC
 ?EPICATAC::EPICATAC.package
@@ -51,7 +51,7 @@ product is provided free of charge, and, therefore, on an "*as is*" basis,
 without warranty of any kind. Please read the file "*LICENSE*" for details.
 
 If you plan to use EPICATAC (version 1.0) in any for-profit application, you are
-required to obtain a separate license.
+required to obtain a separate license. 
 To do so, please contact Nadette Bulgin 
 ([nbulgin@lcr.org](mailto:nbulgin@lcr.org)) at the Ludwig Institute for
 Cancer Research Ltd.
@@ -94,7 +94,7 @@ counts = read.table("featureCounts.txt", skip = 1, header = T)
 rownames(counts) = counts$Geneid
 counts = counts[, c(7:ncol(counts))]
 normalized_counts <- get_TPMlike_counts(counts)
-out <- EPIC(bulk = normalized_counts, reference = BRef_ATAC, ATAC = TRUE)
+out <- EPIC(bulk = normalized_counts, reference = atacRef_PBMC, ATAC = TRUE)
 ```
 
 ##### I receive a warning message that "*the optimization didn't fully converge for some samples*". What does it mean?
