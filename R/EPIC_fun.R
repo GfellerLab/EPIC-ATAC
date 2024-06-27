@@ -8,31 +8,29 @@
 
 #' Estimate the proportion of immune and cancer cells.
 #'
-#' \code{EPIC} takes as input bulk gene expression data (RNA-seq) or bulk chromatin accessibility data (ATAC-Seq)
+#' \code{EPIC_ATAC} takes as input bulk gene expression data (RNA-seq) or bulk chromatin accessibility data (ATAC-Seq)
 #' and returns the proportion of cells composing the various samples.
 #' This function uses a constrained least square minimization to estimate the
 #' proportion of each cell type with a reference profile and another
 #' uncharacterized cell type in bulk samples.
-#'
 #' For ATAC-Seq data, the features names in the bulk samples should correspond to the
 #' coordinates of the open chromatin regions (peaks) identified in the bulk samples and
 #' should be in the following format: chr-start-end. The coordinates do not need to be
 #' matched to the coordinates of the peaks used in the reference profiles. The EPIC_ATAC
 #' function will lift over the coordinates to hg38 if needed (genome_version parameter) and
-#' will match the hg38 peaks coordinates to reference peaks coordinates.
-#'
+#' will match the hg38 peaks coordinates to the reference peaks coordinates.
 #' For RNA-Seq data, the names of the genes in the bulk samples, the reference samples and in the
 #' gene signature list need to be the same format (gene symbols are used in the
 #' predefined reference profiles). The full list of gene names don't need to be
-#' exactly the same between the reference and bulk samples: \emph{EPIC}
+#' exactly the same between the reference and bulk samples: \emph{EPIC_ATAC}
 #' will use the intersection of the genes. In case of duplicate gene names,
-#' \emph{EPIC} will use the median value per duplicate - if you want to consider
+#' \emph{EPIC_ATAC} will use the median value per duplicate - if you want to consider
 #' these cases differently, you can remove the duplicates before calling
-#' \emph{EPIC}.
+#' \emph{EPIC_ATAC}.
 #'
 #' @param bulk A matrix (\code{nFeatures} x \code{nSamples}) of the genes
 #'    expression/peaks accessibility from each bulk sample (the counts should be given in TPM,
-#'    RPKM or FPKM for RNA-Seq or in TPM-like counts when using the prebuilt reference profiles).
+#'    RPKM or FPKM for RNA-Seq or in TPM-like counts for ATAC-Seq data when using the prebuilt reference profiles).
 #'    This matrix needs to have rownames telling the gene names (corresponds to the gene
 #'    symbol in the prebuilt reference profiles (e.g. CD8A, MS4A1)) or the peaks coordinate (e.g chr1-112452-112952).
 #'    It is advised to keep all features in the bulk instead of a subset of
@@ -41,7 +39,7 @@
 #' @param reference (optional): A string or a list defining the reference cells.
 #'    It can take multiple formats, either: \itemize{
 #'      \item\code{NULL}: to use the default reference profiles and
-#'        markers in \code{\link{TRef}} for RNA-Seq deconvolution or in \code{\link{atacRef_TME}}
+#'        markers in \code{\link{TRef}} for RNA-Seq deconvolution or in \code{\link{atacRef_TME} for ATAC-Seq deconvolution}
 #'      \item a char: either \emph{"BRef"} or \emph{"TRef"} for RNA-Seq data deconvolution or
 #'         \emph{"atacRef_PBMC"} or  \emph{"atacRef_TME"} for ATAC-Seq data deconvolution
 #'        to use the reference cells and markers of the corresponding
@@ -57,7 +55,7 @@
 #'        instead of a subset of marker features;
 #'        }
 #'        \item{\code{$sigGenes} (for RNA-Seq)}{a character vector of the gene names to use as
-#'          signature - sigGenes can also be given as a direct input to EPIC
+#'          signature - sigGenes can also be given as a direct input to EPIC_ATAC
 #'          function;}
 #'        \item{\code{$sigPeaks} (for ATAC-Seq)}{a character vector of the peak names to use as
 #'          markers;}
@@ -94,7 +92,7 @@
 #'    only the mRNA/cell values from some cell types (or to add values for new
 #'    cell types). The values given in mRNA_cell_sub will overwrite the default
 #'    values as well as those that might have been given by mRNA_cell.
-#' @param sigGenes (optional): a character vector of the gene names to use as
+#' @param sigGenes (optional): For RNA-Seq data, a character vector of the gene names to use as
 #'    signature for the deconvolution. In principle this is given with the
 #'    reference as the "reference$sigGenes" but if we give a value for this
 #'    input variable, it is these signature genes that will be used instead of
@@ -103,7 +101,7 @@
 #'    samples and reference profiles should be rescaled based on
 #'    the list of features in common between the them (such a rescaling is
 #'    recommanded).
-#' @param withOtherCells (optional, default is TRUE): if EPIC should allow for
+#' @param withOtherCells (optional, default is TRUE): if EPIC_ATAC should allow for
 #'    an additional cell type for which no gene expression or peak accessibility reference profile is
 #'    available or if the bulk is assumed to be composed only of the cells with
 #'    reference profiles.
@@ -116,7 +114,7 @@
 #'    least square optimization is performed as described in
 #'    \href{https://elifesciences.org/articles/26476}{
 #'     \cite{Racle et al., 2017, eLife}}, which is recommanded.
-#'    When this variable is TRUE, EPIC uses the variability of each gene
+#'    When this variable is TRUE, EPIC_ATAC uses the variability of each gene
 #'    from the reference profiles in another way: instead of defining weights
 #'    (based on the variability) for the fit of each feature, we define a range of
 #'    values accessible for each feature (based on the gene expression or peak accessibility
@@ -139,19 +137,16 @@
 #' }
 #'
 #' @examples
-#' res1 <- EPIC(PBMC_ATAC_data$counts)
+#' res1 <- EPIC_ATAC(PBMC_ATAC_data$counts, atacRef_PBMC)
 #' res1$cellFractions
-#' res2 <- EPIC(PBMC_ATAC_data$counts, atacRef_PBMC)
-#' res3 <- EPIC(bulk = PBMC_ATAC_data$counts, reference = atacRef_PBMC)
-#' res4 <- EPIC(PBMC_ATAC_data$counts, reference="atacRef_PBMC")
-#' # Various possible ways of calling EPIC function. res 1 to 4 should
-#' # give exactly the same outputs, and the elements res1$cellFractions
-#' # should be equal to the example predictions found in
-#' # PBMC_ATAC_data$cellFractions.pred for these first 4 results.
+#' res2 <- EPIC_ATAC(bulk = PBMC_ATAC_data$counts, reference = atacRef_PBMC)
+#' res3 <- EPIC_ATAC(PBMC_ATAC_data$counts, reference="atacRef_PBMC")
+#' # Various possible ways of calling EPIC_ATAC function. res 1 to 3 should
+#' # give exactly the same outputs.
 #'
 #' @export
 #'
-EPIC <- function(
+EPIC_ATAC <- function(
     bulk,
     reference = NULL,
     mRNA_cell = NULL,
@@ -201,7 +196,7 @@ EPIC <- function(
          (("refProfiles" %in% refListNames) && !is.null(sigGenes)) )
       stop("Reference, when given as a list needs to contain at least the ",
            "fields 'refProfiles' and 'sigGenes' or 'sigPeaks' (sigGenes could also be ",
-           "given as input to EPIC instead)")
+           "given as input to EPIC_ATAC instead)")
     if (!is.matrix(reference$refProfiles) && !is.data.frame(reference$refProfiles))
       stop("'reference$refProfiles' needs to be given as a matrix or data.frame")
     if (!("refProfiles.var" %in% refListNames)){
@@ -700,4 +695,18 @@ get_TPMlike_counts <- function(raw_counts){
   # correct counts by total number of counts per sample
   norm_counts <- t(t(norm_counts) * 1e6 / colSums(norm_counts))
   return(norm_counts)
+}
+
+
+
+.onAttach <- function(libname, pkgname) {
+
+  packageStartupMessage(
+"Thank you for installing EPICATAC. EPICATAC can be used freely by academic groups for non-commercial purposes.
+
+The product is provided free of charge, and, therefore, on an 'as is' basis, without warranty of any kind. Please read the file LICENSE from our GitHub repository for more details.
+
+FOR-PROFIT USERS: If you plan to use EPICATAC (version 1.0) or any data provided with the scripts in any for-profit application, you are required to obtain a separate license.
+If required, FOR-PROFIT USERS are also expected to have proper licenses for the tools used in EPICATAC: GenomicRanges, rtracklayer, tidyr, GenomeInfoDb, S4Vectors."
+  )
 }

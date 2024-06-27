@@ -3,24 +3,21 @@
 \docType{data}
 \name{atacRef_TME}
 \alias{atacRef_TME}
-\title{ATAC-Seq reference profiles containing cancer-relevant cell-types.}
+\title{ATAC-Seq reference profiles containing cancer-relevant cell types.}
 \format{
-A list of 3 elements: \describe{ \item{$refProfiles,
-  $refProfiles.var}{Matrices (nGenes x nRefCells) of the chromatin accessibility (in
-  TPM-like counts) from the reference cells and the variability of this chromatin
-  accessibility for each peak and each cell type} \item{$sigGenes}{A list of
-  marker peaks used to deconvolve the cell proportions} }
+A list of 4 elements: \describe{ \item{$refProfiles,
+  $refProfiles.var}{Matrices (nPeaks x nRefCellTypes) of the chromatin accessibility (in
+  TPM-like counts) from the reference cells and the variability of the chromatin
+  accessibility for each peak and each cell type} \item{$sigPeaks}{A vector containing all the
+  marker peaks of the atacRef_TME reference} \item{$markers}{A list of
+  marker peaks for each cell type composing the atacRef_TME reference} }
 }
 \usage{
 atacRef_TME
 }
 \description{
-A dataset containing the reference profiles obtained from immune cell
-samples of \emph{B cells}, \emph{CD4 T cells}, \emph{CD8 T cells},
-\emph{Macrophages}, \emph{NK cells}, \emph{Dendritic cells}, \emph{Neutrophils}, \emph{fibroblasts} and \emph{endothelial cells}
-purified from PBMC or whole blood or .......
-}
-\details{
-The collected cells from healthy or diseased samples and stimulated cells.
+A dataset containing the reference profiles obtained from sorted bulk data from immune, stromal and vascular cells:
+\emph{B cells}, \emph{CD4 T cells}, \emph{CD8 T cells},
+\emph{Macrophages}, \emph{NK cells}, \emph{Dendritic cells (DCs)}, \emph{Neutrophils}, \emph{Fibroblasts} and \emph{Endothelial cells}.
 }
 \keyword{datasets}

@@ -3,24 +3,21 @@
 \docType{data}
 \name{atacRef_PBMC}
 \alias{atacRef_PBMC}
-\title{ATAC-Seq reference profiles containing cell-types found in peripheral blood mononuclear cells (PBMCs).}
+\title{ATAC-Seq reference profiles containing cell types found in peripheral blood mononuclear cells (PBMCs).}
 \format{
-A list of 3 elements: \describe{ \item{$refProfiles,
-  $refProfiles.var}{Matrices (nFeatures x nRefCells) of the chromatin accessibility (in
-  TPM-like counts) from the reference cells and the variability of this chromatin
-  accessibility for each peak and each cell type} \item{$sigPeaks}{A list of
-  marker peaks used to deconvolve the cell proportions} }
+A list of 4 elements: \describe{ \item{$refProfiles,
+  $refProfiles.var}{Matrices (nPeaks x nRefCellTypes) of the chromatin accessibility (in
+  TPM-like counts) from the reference cells and the variability of the chromatin
+  accessibility for each peak and each cell type} \item{$sigPeaks}{A vector containing all the
+  marker peaks of the atacRef_PBMC reference} \item{$markers}{A list of
+  marker peaks for each cell type composing the atacRef_PBMC reference} }
 }
 \usage{
 atacRef_PBMC
 }
 \description{
-A dataset containing the reference profiles obtained from immune cell
-samples of \emph{B cells}, \emph{CD4 T cells}, \emph{CD8 T cells},
-\emph{Monocytes}, \emph{NK cells}, \emph{Dendritic cells} and \emph{Neutrophils}, purified from
-PBMC or whole blood.
-}
-\details{
-The original samples were obtained from healthy donors and donors ......
+A dataset containing the reference profiles obtained from sorted bulk data from immune cells
+\emph{B cells}, \emph{CD4 T cells}, \emph{CD8 T cells},
+\emph{Monocytes}, \emph{NK cells}, \emph{Dendritic cells (DCs)} and \emph{Neutrophils}.
 }
 \keyword{datasets}

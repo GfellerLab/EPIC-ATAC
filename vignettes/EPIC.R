@@ -4,7 +4,7 @@
 
 ## ----eval = FALSE-------------------------------------------------------------
 #  # library(EPICATAC) ## If the package isn't loaded (or use EPICATAC::EPIC and so on).
-#  out <- EPIC(bulk = PBMC_ATAC_data$counts, reference = atacRef_PBMC, ATAC = TRUE, withOtherCells = F)
+#  out <- EPIC_ATAC(bulk = PBMC_ATAC_data$counts, reference = atacRef_PBMC, ATAC = TRUE, withOtherCells = F)
 
 ## ----eval = FALSE-------------------------------------------------------------
 #  ?EPICATAC::EPIC
@@ -16,5 +16,5 @@
 #  rownames(counts) = counts$Geneid
 #  counts = counts[, c(7:ncol(counts))]
 #  normalized_counts <- get_TPMlike_counts(counts)
-#  out <- EPIC(bulk = normalized_counts, reference = atacRef_PBMC, ATAC = TRUE)
+#  out <- EPIC_ATAC(bulk = normalized_counts, reference = atacRef_PBMC, ATAC = TRUE)
 

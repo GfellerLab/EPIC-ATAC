@@ -12,7 +12,7 @@
 
 <meta name="author" content="Aurélie Gabriel, Julien Racle and David Gfeller" />
 
-<meta name="date" content="2024-06-19" />
+<meta name="date" content="2024-06-27" />
 
 <title>EPICATAC package</title>
 
@@ -340,7 +340,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">EPICATAC package</h1>
 <h4 class="author">Aurélie Gabriel, Julien Racle and David Gfeller</h4>
-<h4 class="date">2024-06-19</h4>
+<h4 class="date">2024-06-27</h4>
 
 
 
@@ -370,7 +370,7 @@ input a matrix of (or the TPM (or RPKM) for gene expression data) from
 the samples for which to estimate cell proportions. One can also define
 the reference cells to use</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># library(EPICATAC) ## If the package isn&#39;t loaded (or use EPICATAC::EPIC and so on).</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">EPIC</span>(<span class="at">bulk =</span> PBMC_ATAC_data<span class="sc">$</span>counts, <span class="at">reference =</span> atacRef_PBMC, <span class="at">ATAC =</span> <span class="cn">TRUE</span>, <span class="at">withOtherCells =</span> F)</span></code></pre></div>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">EPIC_ATAC</span>(<span class="at">bulk =</span> PBMC_ATAC_data<span class="sc">$</span>counts, <span class="at">reference =</span> atacRef_PBMC, <span class="at">ATAC =</span> <span class="cn">TRUE</span>, <span class="at">withOtherCells =</span> F)</span></code></pre></div>
 <p><code>out</code> is a list containing the various cell fractions in
 each samples as well as some <em>data.frame</em> of the goodness of
 fit.</p>
@@ -386,8 +386,12 @@ purposes. The product is provided free of charge, and, therefore, on an
 “<em>as is</em>” basis, without warranty of any kind. Please read the
 file “<em>LICENSE</em>” for details.</p>
 <p>If you plan to use EPICATAC (version 1.0) in any for-profit
-application, you are required to obtain a separate license. To do so,
-please contact Nadette Bulgin (<a href="mailto:nbulgin@lcr.org">nbulgin@lcr.org</a>) at the Ludwig
+application, you are required to obtain a separate license. Note that
+EPICATAC requires the users to install the following packages:
+GenomicRanges, rtracklayer, tidyr, GenomeInfoDb, S4Vectors. The user
+should verify that their usage is in accordance with the licenses
+associated to these packages. To do so, please contact Nadette Bulgin
+(<a href="mailto:nbulgin@lcr.org">nbulgin@lcr.org</a>) at the Ludwig
 Institute for Cancer Research Ltd.</p>
 </div>
 <div id="contact-information" class="section level2">
@@ -455,7 +459,7 @@ for deconvolution.</p>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">rownames</span>(counts) <span class="ot">=</span> counts<span class="sc">$</span>Geneid</span>
 <span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>counts <span class="ot">=</span> counts[, <span class="fu">c</span>(<span class="dv">7</span><span class="sc">:</span><span class="fu">ncol</span>(counts))]</span>
 <span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>normalized_counts <span class="ot">&lt;-</span> <span class="fu">get_TPMlike_counts</span>(counts)</span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">EPIC</span>(<span class="at">bulk =</span> normalized_counts, <span class="at">reference =</span> atacRef_PBMC, <span class="at">ATAC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">EPIC_ATAC</span>(<span class="at">bulk =</span> normalized_counts, <span class="at">reference =</span> atacRef_PBMC, <span class="at">ATAC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
 <div id="i-receive-a-warning-message-that-the-optimization-didnt-fully-converge-for-some-samples.-what-does-it-mean" class="section level5">
 <h5>I receive a warning message that “<em>the optimization didn’t fully
