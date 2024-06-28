@@ -3,9 +3,9 @@
 \docType{data}
 \name{liftover_chains}
 \alias{liftover_chains}
-\title{Chains to lift over hg19 or hg18 coordinates.}
+\title{Chains to lift over hg19 or hg18 coordinates to hg38 coordinates.}
 \format{
-Chain object: \describe{ \item{hg18_to_hg38_chain}{Chain object} }
+Chain object: \describe{ \item{liftover_chains}{Chain objects to lift over hg19 or hg18 coordinates to hg38} }
 }
 \source{
 \enumerate{

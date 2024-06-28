@@ -3,33 +3,27 @@
 \docType{data}
 \name{PBMC_ATAC_data}
 \alias{PBMC_ATAC_data}
-\title{Example dataset containing bulk ATAC-Seq data from five healthy samples.}
+\title{Example dataset containing bulk ATAC-Seq data from five PBMC samples.}
 \format{
-This is a list of 3 elements: \describe{
+This is a list of 2 elements: \describe{
  \item{$counts}{(matrix of 106446 genes x 5 donors) The raw counts were normalized
- using a TPM-like approach, i.e normalizing the counts by the length of the open regions
+ using a TPM-like approach, i.e., normalizing the counts by the length of the open regions
  and by the total number of counts in each sample. The open regions have been determined
  using the MACS2 peak calling tool within the PEPATAC framework and the \emph{hg38} genome
  was considered.}
- \item{$cellFractions.obs}{(matrix of 5 donors x 6 cell types) The
-   proportions of the different cell types measured by FACS (the
-   "other_cells" correspond to the live cells without any marker of the
-   other given cell types).}
- \item{$cellFractions.pred}{(matrix of 5 donors x 6 cell types) The
-   proportions of the different cell types, as predicted by EPICATAC based on
-   the reference profiles \code{BRef_ATAC}.}
-}
+ \item{$cellFractions.obs}{(matrix of 5 donors x 9 cell types) The
+   proportions of the different cell types measured by flow cytometry.}}
 }
 \source{
-\url{...}
+\url{https://elifesciences.org/reviewed-preprints/94833#s1}
 }
 \usage{
 PBMC_ATAC_data
 }
 \description{
-This is the dataset measured in \href{...}{
- \cite{Gabriel et al., 2023}}. It contains
-the ATAC-Seq data from 5 healthy samples as well as the proportions of the
-the immune cell types as measured by FACS.
+This is the dataset measured in \href{https://elifesciences.org/reviewed-preprints/94833#s1}{
+ \cite{Gabriel et al., 2024}}. It contains
+the ATAC-Seq data from 5 healthy PBMC samples as well as the proportions of the
+the immune cell types as measured by flow cytometry.
 }
 \keyword{datasets}

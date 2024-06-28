@@ -12,9 +12,9 @@
 
 <meta name="author" content="Aurélie Gabriel, Julien Racle and David Gfeller" />
 
-<meta name="date" content="2023-10-06" />
+<meta name="date" content="2024-06-27" />
 
-<title>EPIC-ATAC</title>
+<title>EPICATAC package</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -31,23 +31,23 @@ document.addEventListener('DOMContentLoaded', function(e) {
 </script>
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
 
 
 
 <style type="text/css">
-  code {
-    white-space: pre;
-  }
-  .sourceCode {
-    overflow: visible;
-  }
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
@@ -65,55 +65,54 @@ pre > code.sourceCode { white-space: pre-wrap; }
 pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-  { counter-reset: source-line 0; }
+{ counter-reset: source-line 0; }
 pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
+{ position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
 div.sourceCode
-  {   }
+{ }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -339,9 +338,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">EPIC-ATAC</h1>
+<h1 class="title toc-ignore">EPICATAC package</h1>
 <h4 class="author">Aurélie Gabriel, Julien Racle and David Gfeller</h4>
-<h4 class="date">2023-10-06</h4>
+<h4 class="date">2024-06-27</h4>
 
 
 
@@ -361,8 +360,8 @@ RNA-Seq data can also be given as input to the EPICATAC package.</p>
 <div id="installation" class="section level2">
 <h2>Installation</h2>
 <p>To install EPICATAC, run the following lines in R:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;GfellerLab/EPIC-ATAC&quot;</span>, <span class="at">build_vignettes=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;GfellerLab/EPIC-ATAC&quot;</span>, <span class="at">build_vignettes=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2>Usage</h2>
@@ -370,15 +369,15 @@ RNA-Seq data can also be given as input to the EPICATAC package.</p>
 input a matrix of (or the TPM (or RPKM) for gene expression data) from
 the samples for which to estimate cell proportions. One can also define
 the reference cells to use</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># library(EPICATAC) ## If the package isn&#39;t loaded (or use EPICATAC::EPIC and so on).</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">EPIC</span>(<span class="at">bulk =</span> PBMC_ATAC_data<span class="sc">$</span>counts, <span class="at">reference =</span> BRef_ATAC, <span class="at">ATAC =</span> <span class="cn">TRUE</span>, <span class="at">withOtherCells =</span> F)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># library(EPICATAC) ## If the package isn&#39;t loaded (or use EPICATAC::EPIC and so on).</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">EPIC_ATAC</span>(<span class="at">bulk =</span> PBMC_ATAC_data<span class="sc">$</span>counts, <span class="at">reference =</span> atacRef_PBMC, <span class="at">ATAC =</span> <span class="cn">TRUE</span>, <span class="at">withOtherCells =</span> F)</span></code></pre></div>
 <p><code>out</code> is a list containing the various cell fractions in
 each samples as well as some <em>data.frame</em> of the goodness of
 fit.</p>
 <p>Various other options are available and are well documented in the
-help pages from EPIC:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>?EPICATAC<span class="sc">::</span>EPIC</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>?EPICATAC<span class="sc">::</span>EPICATAC.package</span></code></pre></div>
+help pages from EPICATAC:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>?EPICATAC<span class="sc">::</span>EPIC</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>?EPICATAC<span class="sc">::</span>EPICATAC.package</span></code></pre></div>
 </div>
 <div id="license" class="section level2">
 <h2>License</h2>
@@ -387,8 +386,12 @@ purposes. The product is provided free of charge, and, therefore, on an
 “<em>as is</em>” basis, without warranty of any kind. Please read the
 file “<em>LICENSE</em>” for details.</p>
 <p>If you plan to use EPICATAC (version 1.0) in any for-profit
-application, you are required to obtain a separate license. To do so,
-please contact Nadette Bulgin (<a href="mailto:nbulgin@lcr.org">nbulgin@lcr.org</a>) at the Ludwig
+application, you are required to obtain a separate license. Note that
+EPICATAC requires the users to install the following packages:
+GenomicRanges, rtracklayer, tidyr, GenomeInfoDb, S4Vectors. The user
+should verify that their usage is in accordance with the licenses
+associated to these packages. To do so, please contact Nadette Bulgin
+(<a href="mailto:nbulgin@lcr.org">nbulgin@lcr.org</a>) at the Ludwig
 Institute for Cancer Research Ltd.</p>
 </div>
 <div id="contact-information" class="section level2">
@@ -444,19 +447,19 @@ marker peaks are in common with the bulk data?</h5>
 for each of our marker peaks. To do that, you can use featureCounts and
 the following command line:</li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">featureCounts</span> <span class="at">-F</span> SAF <span class="at">-O</span> <span class="at">--fracOverlap</span> 0.2 <span class="at">-T</span> 1 <span class="at">-p</span> <span class="at">-a</span> markerPeaks.saf <span class="at">-o</span> featureCounts.txt bam_files</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="ex">featureCounts</span> <span class="at">-F</span> SAF <span class="at">-O</span> <span class="at">--fracOverlap</span> 0.2 <span class="at">-T</span> 1 <span class="at">-p</span> <span class="at">-a</span> markerPeaks.saf <span class="at">-o</span> featureCounts.txt bam_files</span></code></pre></div>
 <p>In the previous command line, the file “<em>markerPeaks.saf</em>”
 contains the coordinates of our marker peaks and this file is available
 and bam_files correspond to your samples bam files. The
 “<em>featureCounts.txt</em>” file can then be passed to the
 get_TPMlike_counts function to obtain normalized counts that can be used
 for deconvolution.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># library(EPICATAC) ## If the package isn&#39;t loaded (or use EPICATAC::EPIC and so on).</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">=</span> <span class="fu">read.table</span>(<span class="st">&quot;featureCounts.txt&quot;</span>, <span class="at">skip =</span> <span class="dv">1</span>, <span class="at">header =</span> T)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(counts) <span class="ot">=</span> counts<span class="sc">$</span>Geneid</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">=</span> counts[, <span class="fu">c</span>(<span class="dv">7</span><span class="sc">:</span><span class="fu">ncol</span>(counts))]</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>normalized_counts <span class="ot">&lt;-</span> <span class="fu">get_TPMlike_counts</span>(counts)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">EPIC</span>(<span class="at">bulk =</span> normalized_counts, <span class="at">reference =</span> BRef_ATAC, <span class="at">ATAC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># library(EPICATAC) ## If the package isn&#39;t loaded (or use EPICATAC::EPIC and so on).</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>counts <span class="ot">=</span> <span class="fu">read.table</span>(<span class="st">&quot;featureCounts.txt&quot;</span>, <span class="at">skip =</span> <span class="dv">1</span>, <span class="at">header =</span> T)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">rownames</span>(counts) <span class="ot">=</span> counts<span class="sc">$</span>Geneid</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>counts <span class="ot">=</span> counts[, <span class="fu">c</span>(<span class="dv">7</span><span class="sc">:</span><span class="fu">ncol</span>(counts))]</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>normalized_counts <span class="ot">&lt;-</span> <span class="fu">get_TPMlike_counts</span>(counts)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">EPIC_ATAC</span>(<span class="at">bulk =</span> normalized_counts, <span class="at">reference =</span> atacRef_PBMC, <span class="at">ATAC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
 <div id="i-receive-a-warning-message-that-the-optimization-didnt-fully-converge-for-some-samples.-what-does-it-mean" class="section level5">
 <h5>I receive a warning message that “<em>the optimization didn’t fully

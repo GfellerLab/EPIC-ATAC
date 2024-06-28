@@ -4,7 +4,7 @@
 \name{EPICATAC.package}
 \alias{EPICATAC.package}
 \title{EPICATAC: a package to Estimate the Proportion of Immune and Cancer cells from
- tumor gene expression data.}
+ tumor gene expression and chromatin accessibility data.}
 \description{
 EPICATAC package provides the function and cell reference profiles to
 estimate the proportion of immune, stromal, endothelial and cancer or other
@@ -16,15 +16,15 @@ below.
 }
 \section{EPICATAC functions}{
 
-\code{\link{EPIC}} is the main function to call to estimate the
- various cells proportions from a bulk sample.
+\code{\link{EPIC_ATAC}} is the main function to estimate the
+ various cells proportions from a bulk ATAC-Seq sample.
 }
 
 \section{Included datasets}{
 
-\code{\link{BRef_ATAC}}: reference profiles for ATAC-Seq deconvolution of PBMCs datasets.
+\code{\link{atacRef_PBMC}}: reference profiles for ATAC-Seq deconvolution of PBMCs datasets.
 
-\code{\link{TRef_ATAC}}: reference profiles for ATAC-Seq deconvolution of tumor samples.
+\code{\link{atacRef_TME}}: reference profiles for ATAC-Seq deconvolution of tumor samples.
 
 \code{\link{BRef}}: reference profiles from circulating immune cells for RNA-Seq deconvolution.
 
@@ -33,6 +33,9 @@ below.
 
 \code{\link{melanoma_data}}: example of RNA-Seq dataset containing data from lymph nodes
  from patients with metastatic melanoma.
+
+ \code{\link{PBMC_ATAC_data}}: example of ATAC-Seq dataset containing data from PBMC
+ samples.
 
 \code{\link{mRNA_cell_default}}: values of mRNA per cell for the main cell
  types.
@@ -44,6 +47,10 @@ Racle, J., Jonge, K. de, Baumgaertner, P., Speiser, D.E., and
 Gfeller, D. (2017). Simultaneous enumeration of cancer and immune cell
 types from bulk tumor gene expression data. \emph{eLife Sciences, 6}, e26476
 (\url{https://elifesciences.org/articles/26476})
+
+Gabriel AAG, Racle, J., Falquet M., Jandus C. Gfeller D. (2024).
+Robust estimation of cancer and immune cell-type proportions from bulk tumor ATAC-Seq data. \emph{eLife Sciences, 113:RP94833}
+(\url{https://elifesciences.org/reviewed-preprints/94833#s1})
 }
 
 \section{Authors}{
