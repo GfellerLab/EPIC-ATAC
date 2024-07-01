@@ -12,7 +12,7 @@
 
 <meta name="author" content="Aurélie Gabriel, Julien Racle and David Gfeller" />
 
-<meta name="date" content="2024-06-27" />
+<meta name="date" content="2024-07-01" />
 
 <title>EPICATAC package</title>
 
@@ -340,7 +340,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">EPICATAC package</h1>
 <h4 class="author">Aurélie Gabriel, Julien Racle and David Gfeller</h4>
-<h4 class="date">2024-06-27</h4>
+<h4 class="date">2024-07-01</h4>
 
 
 
@@ -365,18 +365,24 @@ RNA-Seq data can also be given as input to the EPICATAC package.</p>
 </div>
 <div id="usage" class="section level2">
 <h2>Usage</h2>
-<p>The main function in this package is <code>EPIC</code>. It needs as
-input a matrix of (or the TPM (or RPKM) for gene expression data) from
-the samples for which to estimate cell proportions. One can also define
-the reference cells to use</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># library(EPICATAC) ## If the package isn&#39;t loaded (or use EPICATAC::EPIC and so on).</span></span>
+<p>The main function in this package is <code>EPIC_ATAC</code>. It needs
+as input a matrix of TPM-like counts for ATAC-Seq data, i.e., counts
+normalized for peaks length and sample depth and rescaled so that the
+counts of each sample sum to 10^6 (or the TPM (or RPKM) for gene
+expression data) from the samples to deconvolve. Note that you can
+obtain TPM-like transformed data from counts data using the function
+<code>get_TPMlike_counts</code>. One can define the reference profiles
+to use with the <code>reference</code> option (for ATAC-Seq
+deconvolution, use the <code>atacRef_PBMC</code> for PBMC samples and
+the <code>atacRef_TME</code> for cancer samples).</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># library(EPICATAC) ## If the package isn&#39;t loaded (or use EPICATAC::EPIC_ATAC and so on).</span></span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">EPIC_ATAC</span>(<span class="at">bulk =</span> PBMC_ATAC_data<span class="sc">$</span>counts, <span class="at">reference =</span> atacRef_PBMC, <span class="at">ATAC =</span> <span class="cn">TRUE</span>, <span class="at">withOtherCells =</span> F)</span></code></pre></div>
 <p><code>out</code> is a list containing the various cell fractions in
 each samples as well as some <em>data.frame</em> of the goodness of
 fit.</p>
 <p>Various other options are available and are well documented in the
 help pages from EPICATAC:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>?EPICATAC<span class="sc">::</span>EPIC</span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>?EPICATAC<span class="sc">::</span>EPIC_ATAC</span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>?EPICATAC<span class="sc">::</span>EPICATAC.package</span></code></pre></div>
 </div>
 <div id="license" class="section level2">
@@ -408,12 +414,12 @@ Gfeller (<a href="mailto:david.gfeller@unil.ch">david.gfeller@unil.ch</a>).</p>
 <li>EPIC-ATAC predicts the proportions of the various cell types for
 which we have reference profiles (and corresponding cell-type specific
 markers). But, depending on the bulk sample, it is possible that some
-other cell types are present for which we don’t have any reference
-profile. EPIC-ATAC returns the proportion of these remaining cells under
-the name “<em>otherCells</em>”. In the case of tumor samples, most of
-these other cells would certainly correspond to the cancer cells, but it
-could be that there are also some stromal cells or epithelial cells for
-example.</li>
+other cell types are present in the bulk but absent from the reference
+profiles. EPIC-ATAC returns the proportion of these remaining cells
+under the name “<em>otherCells</em>”. In the case of tumor samples, most
+of these other cells would certainly correspond to the cancer cells, but
+it could be that there are also some stromal cells or epithelial cells
+for example.</li>
 </ul>
 </div>
 <div id="i-receive-an-error-message-attempt-to-set-colnames-on-an-object-with-less-than-two-dimensions.-what-can-i-do" class="section level5">
@@ -454,7 +460,7 @@ and bam_files correspond to your samples bam files. The
 “<em>featureCounts.txt</em>” file can then be passed to the
 get_TPMlike_counts function to obtain normalized counts that can be used
 for deconvolution.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># library(EPICATAC) ## If the package isn&#39;t loaded (or use EPICATAC::EPIC and so on).</span></span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># library(EPICATAC) ## If the package isn&#39;t loaded (or use EPICATAC::EPIC_ATAC and so on).</span></span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>counts <span class="ot">=</span> <span class="fu">read.table</span>(<span class="st">&quot;featureCounts.txt&quot;</span>, <span class="at">skip =</span> <span class="dv">1</span>, <span class="at">header =</span> T)</span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">rownames</span>(counts) <span class="ot">=</span> counts<span class="sc">$</span>Geneid</span>
 <span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>counts <span class="ot">=</span> counts[, <span class="fu">c</span>(<span class="dv">7</span><span class="sc">:</span><span class="fu">ncol</span>(counts))]</span>
@@ -474,12 +480,12 @@ proportions and reference profiles of the various cell types.</p>
 didn’t manage to fully converge for this regression, for some of the
 samples. You can then check the “<em>fit.gof$convergeCode</em>” (and
 possibly also “<em>fit.gof$convergeMessage</em>”) that is outputted by
-EPIC alongside the cell proportions. This will tell you which samples
-had issue with the convergence (a value of 0 means it converged ok,
-while other values are errors/warnings, their meaning can be found in
-the help of “<em>optim</em>” (or “<em>constrOptim</em>”) function from R
-(from “<em>stats</em>” package) which is used during the optimization
-and we simply forward the message it returns).</p>
+EPIC_ATAC alongside the cell proportions. This will tell you which
+samples had issue with the convergence (a value of 0 means it converged
+ok, while other values are errors/warnings, their meaning can be found
+in the help of “<em>optim</em>” (or “<em>constrOptim</em>”) function
+from R (from “<em>stats</em>” package) which is used during the
+optimization and we simply forward the message it returns).</p>
 <p>The error code that usually comes is a “1” which means that the
 maximum number of iterations has been reached in the optimization. This
 could mean there is an issue with the bulk data that maybe don’t
@@ -497,7 +503,7 @@ is only a small fraction from your original samples. Another possibility
 would be to change the parameters of the optim/constrOptim function to
 allow for more iterations or maybe a weaker tolerance for the
 convergence, this numpber of iterations can be provided using the
-nb_iter parameter in the EPIC function.</p></li>
+nb_iter parameter in the EPIC_ATAC function.</p></li>
 </ul>
 </div>
 <div id="who-should-i-contact-in-case-of-a-technical-or-other-issue" class="section level5">

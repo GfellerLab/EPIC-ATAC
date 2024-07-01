@@ -3,15 +3,15 @@
 #  devtools::install_github("GfellerLab/EPIC-ATAC", build_vignettes=TRUE)
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  # library(EPICATAC) ## If the package isn't loaded (or use EPICATAC::EPIC and so on).
+#  # library(EPICATAC) ## If the package isn't loaded (or use EPICATAC::EPIC_ATAC and so on).
 #  out <- EPIC_ATAC(bulk = PBMC_ATAC_data$counts, reference = atacRef_PBMC, ATAC = TRUE, withOtherCells = F)
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  ?EPICATAC::EPIC
+#  ?EPICATAC::EPIC_ATAC
 #  ?EPICATAC::EPICATAC.package
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  # library(EPICATAC) ## If the package isn't loaded (or use EPICATAC::EPIC and so on).
+#  # library(EPICATAC) ## If the package isn't loaded (or use EPICATAC::EPIC_ATAC and so on).
 #  counts = read.table("featureCounts.txt", skip = 1, header = T)
 #  rownames(counts) = counts$Geneid
 #  counts = counts[, c(7:ncol(counts))]
