@@ -6,11 +6,16 @@ EPIC-ATAC
 ## Description
 
 Package implementing the EPIC method to estimate the proportion of
-immune, stromal, endothelial and cancer or other cells from bulk
+immune, stromal, endothelial, and cancer (or other cells) from bulk
 chromatin accessibility data (ATAC-Seq). EPIC-ATAC is based on reference
-ATAC-Seq profiles for the main non-malignant cell types and it predicts
-the proportion of these cells and of the remaining “other cells” (that
-are mostly cancer cells) for which no reference profile is given.
+ATAC-Seq profiles for the main non-malignant cell types and predicts the
+proportion of these cells and of the remaining “other cells” (that are
+mostly cancer cells) for which no reference profile is given.
+
+This package is described in the following publication: A AG Gabriel, J
+Racle, M Falquet, C Jandus, D Gfeller. 2024. Robust estimation of cancer
+and immune cell-type proportions from bulk tumor ATAC-Seq data. DOI:
+<https://doi.org/10.7554/eLife.94833.3>
 
 This framework is an extension of EPIC previously developed for bulk
 RNA-Seq data deconvolution and described in the publication from *Racle
@@ -32,7 +37,7 @@ devtools::install_github("GfellerLab/EPIC-ATAC", build_vignettes=TRUE)
 The main function in this package is `EPIC_ATAC`. It needs as input a
 matrix of TPM-like counts for ATAC-Seq data, i.e., counts normalized for
 peaks length and sample depth and rescaled so that the counts of each
-sample sum to 10^6 (or the TPM (or RPKM) for gene expression data) from
+sample sum to 10^6, (or the TPM (or RPKM) for gene expression data) from
 the samples to deconvolve. Note that you can obtain TPM-like transformed
 data from counts data using the function `get_TPMlike_counts`. One can
 define the reference profiles to use with the `reference` option (for
@@ -63,12 +68,14 @@ purposes. The product is provided free of charge, and, therefore, on an
 “*LICENSE*” for details.
 
 If you plan to use EPICATAC (version 1.0) in any for-profit application,
-you are required to obtain a separate license. Note that EPICATAC
-requires the users to install the following packages: GenomicRanges,
-rtracklayer, tidyr, GenomeInfoDb, S4Vectors. The user should verify that
-their usage is in accordance with the licenses associated to these
-packages. To do so, please contact Nadette Bulgin (<nbulgin@lcr.org>) at
-the Ludwig Institute for Cancer Research Ltd.
+you are required to obtain a separate license. To do so, please contact
+Nadette Bulgin (<nbulgin@lcr.org>) at the Ludwig Institute for Cancer
+Research Ltd.
+
+Note that EPICATAC requires the users to install the following packages:
+GenomicRanges, rtracklayer, tidyr, GenomeInfoDb, S4Vectors. The user
+should verify that their usage is in accordance with the licenses
+associated to these packages.
 
 ## Contact information
 
@@ -174,7 +181,7 @@ out <- EPIC_ATAC(bulk = normalized_counts, reference = atacRef_PBMC, ATAC = TRUE
   if it is only a small fraction from your original samples. Another
   possibility would be to change the parameters of the optim/constrOptim
   function to allow for more iterations or maybe a weaker tolerance for
-  the convergence, this numpber of iterations can be provided using the
+  the convergence, this number of iterations can be provided using the
   nb_iter parameter in the EPIC_ATAC function.
 
 ##### Who should I contact in case of a technical or other issue?
