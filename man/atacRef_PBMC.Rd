@@ -13,7 +13,7 @@ A list of 4 elements: \describe{ \item{$refProfiles,
   marker peaks for each cell type composing the atacRef_PBMC reference} }
 }
 \usage{
-atacRef_PBMC
+data(atacRef_PBMC)
 }
 \description{
 A dataset containing the reference profiles obtained from sorted bulk data from immune cells

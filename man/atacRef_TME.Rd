@@ -13,7 +13,7 @@ A list of 4 elements: \describe{ \item{$refProfiles,
   marker peaks for each cell type composing the atacRef_TME reference} }
 }
 \usage{
-atacRef_TME
+data(atacRef_TME)
 }
 \description{
 A dataset containing the reference profiles obtained from sorted bulk data from immune, stromal and vascular cells:

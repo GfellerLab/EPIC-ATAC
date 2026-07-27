@@ -16,7 +16,7 @@ A named numeric vector of the relative amount of mRNA per cell type.
 \url{https://elifesciences.org/articles/26476}
 }
 \usage{
-mRNA_cell_default
+data(mRNA_cell_default)
 }
 \description{
 These values have been obtained from experiments (see

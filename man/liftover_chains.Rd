@@ -14,7 +14,7 @@ Chain object: \describe{ \item{liftover_chains}{Chain objects to lift over hg19 
  }
 }
 \usage{
-liftover_chains
+data(liftover_chains)
 }
 \description{
 Chains object to perform liftover

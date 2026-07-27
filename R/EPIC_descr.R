@@ -45,7 +45,7 @@
 #' Aurélie Gabriel <\email{aurelie.gabriel@unil.ch}>, Julien Racle <\email{julien.racle@unil.ch}> and David Gfeller
 #' <\email{david.gfeller@unil.ch}>.
 #'
-#' @docType package
+#' @docType _PACKAGE
 #' @name EPICATAC.package
 NULL
 

@@ -25,7 +25,7 @@ This is a list of 3 elements: \describe{
 \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE93722}
 }
 \usage{
-melanoma_data
+data(melanoma_data)
 }
 \description{
 This is the dataset measured in \href{https://elifesciences.org/articles/26476}{

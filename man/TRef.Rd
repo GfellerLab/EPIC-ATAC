@@ -16,7 +16,7 @@ A list of 3 elements: \describe{ \item{$refProfiles,
 \url{http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE72056}
 }
 \usage{
-TRef
+data(TRef)
 }
 \description{
 A dataset containing the reference profiles obtained from various

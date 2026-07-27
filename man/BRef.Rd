@@ -19,7 +19,7 @@ A list of 3 elements: \describe{ \item{$refProfiles,
  }
 }
 \usage{
-BRef
+data(BRef)
 }
 \description{
 A dataset containing the reference profiles obtained from immune cell

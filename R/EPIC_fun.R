@@ -290,16 +290,15 @@ EPIC_ATAC <- function(
   sigGenes <- sigGenes[sigGenes %in% commonGenes]
   nSigGenes <- length(sigGenes)
   if (nSigGenes < nRefCells)
-    stop("There are only ", nSigGenes, " signature genes",
-         " matching common genes between bulk and reference profiles,",
-         " but there should be more signature genes than reference cells")
+    stop("There are only ", nSigGenes, " signature peaks",
+         " matching common peaks between bulk and reference profiles,",
+         " but there should be more signature peaks than reference cells")
 
   if (scaleExprs){
-    if (length(commonGenes) < 2e3)
-      warning("there are few genes in common between the bulk samples and ",
-              "reference cells:", length(commonGenes), ", so the data scaling ",
-              "might be an issue")
-    # The value of 2e3 is arbitrary, but should be a respectable number for the
+    if (length(commonGenes) < 1e3)
+      warning("there are ", length(commonGenes), "peaks in common between the bulk samples and ",
+              "reference cells. Please consider extracting ATAC signal from all our reference marker peaks: system.file('extdata', 'markerPeaks.saf', package='EPICATAC')")
+    # The value of 1e3 is arbitrary, but should be a respectable number for the
     # data renormalization.
     bulk <- scaleCounts(bulk, sigGenes, commonGenes)$counts
     temp <- scaleCounts(refProfiles, sigGenes, commonGenes)

@@ -18,7 +18,7 @@ This is a list of 2 elements: \describe{
 \url{https://elifesciences.org/reviewed-preprints/94833#s1}
 }
 \usage{
-PBMC_ATAC_data
+data(PBMC_ATAC_data)
 }
 \description{
 This is the dataset measured in \href{https://elifesciences.org/reviewed-preprints/94833#s1}{
